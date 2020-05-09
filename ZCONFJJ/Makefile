@@ -11,10 +11,10 @@ S  =	mod_orb_jj.f90           mod_symc.f90             mod_symt.f90             
 	Jparity.f90              jterm.f90                kappa.f90                \
 	label_jj.f90             mj_value.f90             new_index.f90            \
 	prepare_iort_jj.f90      print_conf_jj.f90        Incode_int_jj.f90        \
-        read_conf_jj.f90         read_core_jj.f90         read_expn_jj.f90         \
+	read_conf_jj.f90         read_core_jj.f90         read_expn_jj.f90         \
 	smu.f90                  test_cj.f90              gen_jj_states.f90        \
-        coef_1conf.f90           coef_2conf_jj.f90        read_peel_orb.f90        \
-        check_conf_jj.f90       
+	coef_1conf.f90           coef_2conf_jj.f90        read_peel_orb.f90        \
+	check_conf_jj.f90        read_iort_jj.f90
 
 O = $(S:.f90=.o)
  
@@ -30,7 +30,9 @@ clean:
 .SUFFIXES: .f90 .mod .o .f
  
 .f90.o:
-	$(FC) $(compL) -fcheck=bounds -fbacktrace $<
+	$(FC) $(compL)   $<
  
+# gfortran:  -fcheck=bounds -fbacktrace
+#	$(FC) $(compL) -g -fcheck=all -Wall $<
  
 

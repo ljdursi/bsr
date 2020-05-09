@@ -1,5 +1,5 @@
 !======================================================================
-      SUBROUTINE bs_cwf(z,l,k,c,acc)
+      Subroutine bs_cwf(z,l,k,c,acc)
 !======================================================================
 !     B-spline expansion for regular Coulomb function with E = k^2
 !----------------------------------------------------------------------
@@ -11,22 +11,20 @@
 !     Normalization and estimation of accuracy is given by comparison
 !     with COULFG at last interval
 !----------------------------------------------------------------------
-
-      USE spline_param
-      USE spline_grid
-      USE spline_galerkin, bbb => bb
+      Use spline_param
+      Use spline_grid
+      Use spline_galerkin, bbb => bb
 
       Implicit none
-
-      Integer, Intent(in) :: l
-      Real(8), Intent(in) :: z,k
-      Real(8), Intent(out) :: acc,c(ns)
+      Integer, intent(in) :: l
+      Real(8), intent(in) :: z,k
+      Real(8), intent(out) :: acc,c(ns)
 
       Integer :: i,j,jp,m,n,ith,ifail,info,ii
-      Integer, Allocatable  :: IPIV(:)
+      Integer, allocatable  :: IPIV(:)
       Real(8) :: fl,eta,rho,cn,acc1,acc2,ee,zz,fc,gc,fcp,gcp
-      REAL(8), Allocatable :: a(:,:),b(:,:),aa(:,:),bb(:,:),hl(:,:)
-      REAL(8), Allocatable :: cf(:),cfb(:),cc(:),c1(:),c2(:)
+      REAL(8), allocatable :: a(:,:),b(:,:),aa(:,:),bb(:,:),hl(:,:)
+      REAL(8), allocatable :: cf(:),cfb(:),cc(:),c1(:),c2(:)
 
       Allocate(a(ns,ns),b(ns,ns),aa(ns,ns),bb(ns,ns),hl(ns,ks))
       Allocate(IPIV(ns),cf(ks),cfb(ks),cc(ns),c1(ns),c2(ns))
@@ -60,10 +58,10 @@
 
       h = 0.d0      
       b = 0.d0
-      do j = 1,ks;  do i = ks-j+1,ns; jp=i-ks+j 
+      Do j = 1,ks;  Do i = ks-j+1,ns; jp=i-ks+j 
         a(i,jp)=hl(i,j);  a(jp,i)=hl(i,j)
         b(i,jp)=sb(i,j);  b(jp,i)=sb(i,j)
-      end do; end do
+      End do; End do
       a(ns-1,ns)=hl(1,1)
 
 ! ... delete first B-splines:       
@@ -83,12 +81,12 @@
       acc1 = 1.d0
       if(INFO.eq.0) then
       cfb = 0.d0
-      do m = 1,ks                 ! over gausian points
-       do ith = 1,ks              ! over B-splines in given interval
+      Do m = 1,ks                 ! over gausian points
+       Do ith = 1,ks              ! over B-splines in given interval
         i = nv+ith-1              ! B-spline index
         cfb(m) = cfb(m) + c1(i)*bsp(nv,m,ith)
-        end do
-      end do
+        End do
+      End do
       cn = 0.d0       
       Do m = 1,ks; cfb(m) = cf(m)/cfb(m); cn=cn+cfb(m); End do 
       cn=cn/ks; c1 = cn*c1
@@ -109,12 +107,12 @@
       acc2 = 1.d0
       if(INFO.eq.0) then
       cfb = 0.d0
-      do m = 1,ks                 ! over gausian points
-       do ith = 1,ks              ! over B-splines in given interval
+      Do m = 1,ks                 ! over gausian points
+       Do ith = 1,ks              ! over B-splines in given interval
         i = nv+ith-1              ! B-spline index
         cfb(m) = cfb(m) + c2(i)*bsp(nv,m,ith)
-        end do
-      end do
+        End do
+      End do
       cn = 0.d0       
       Do m = 1,ks; cfb(m) = cf(m)/cfb(m); cn=cn+cfb(m); End do 
       cn=cn/ks; c2 = cn*c2
@@ -129,6 +127,5 @@
        acc = acc1; c = c1
       end if
 
-
-      END SUBROUTINE bs_cwf
+      End Subroutine bs_cwf
 

@@ -1,5 +1,5 @@
 !=====================================================================
-      MODULE conf_LS
+      Module conf_LS
 !=====================================================================
 !     description of configuration lists 
 !     ROUTINES:  alloc_cfg_LS (m)
@@ -17,8 +17,6 @@
       Integer :: parity = 0     !  parity of states (+1,-1)
 
 ! ... description of 1 conf.w.function:  
-
-!      Integer, parameter :: msh = 25  ! max. number of shells behind core
 
       Integer :: no, Ltotal, Stotal, Jtotal, Ptotal, iconf, iterm
       Integer, dimension(msh) :: nn,ln,iq,kn, np_orb, np
@@ -84,13 +82,13 @@
 
       Integer :: m_conf_LS 
 
-      END MODULE conf_LS
+      End Module conf_LS
 
 
 !======================================================================
       Subroutine alloc_cfg_LS(m)
 !======================================================================
-! ... allocate the configurations in module conf_LS
+! ... allocate the configurations in module "conf_LS"
 !----------------------------------------------------------------------
       Use conf_LS
 
@@ -142,11 +140,11 @@
 !======================================================================
 !     add new CAS to cfg_list
 !----------------------------------------------------------------------
-      USE conf_LS
+      Use conf_LS
 
       Implicit none 
       Integer :: i,ic,ip
-      Integer, External :: Iadd_symc_LS, Iadd_symt_LS, Ifind_nlk
+      Integer, external :: Iadd_symc_LS, Iadd_symt_LS, Ifind_nlk
 
       Iadd_cfg_LS = 0
       if(no.le.0) Return
@@ -172,7 +170,7 @@
 !======================================================================
 !     find or add new CAS to cfg_list
 !----------------------------------------------------------------------
-      USE conf_LS
+      Use conf_LS
 
       Implicit none 
       Integer :: i,ic,ip
@@ -215,8 +213,7 @@
 !     find or add new CAS to cfg_list
 !     Jfind_cfg_LS = configuration index (<0 if was found)
 !----------------------------------------------------------------------
-
-      USE conf_LS
+      Use conf_LS
 
       Implicit none 
       Integer :: i,ic,ip
@@ -258,7 +255,6 @@
 !======================================================================
 !     extract the configuration (ic) from the cfg-list
 !----------------------------------------------------------------------
-
       Use conf_LS
 
       Implicit none
@@ -290,7 +286,6 @@
 !======================================================================
 !     save(restore) curent state in position i                   
 !----------------------------------------------------------------------
-
       Use conf_LS
       Implicit none 
       Integer, intent(in) :: i
@@ -324,7 +319,6 @@
 !======================================================================
 !     number of shells in state 'ic'                   
 !----------------------------------------------------------------------
-
       Use conf_LS
 
       Implicit none 

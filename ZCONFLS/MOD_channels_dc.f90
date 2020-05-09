@@ -1,72 +1,72 @@
 !===========================================================================
-      MODULE channels_dc
+      Module channels_dc
 !===========================================================================
 !     define scattering channels for one partial wave
 !---------------------------------------------------------------------------
-    
-      IMPLICIT NONE
+      Implicit none
 
       Integer :: nlsp = 0  !  number of partial waves                 
       Integer :: mlsp = 0  !  max.dimension                 
 
-      Integer, ALLOCATABLE :: lpar (:)    !  total L                      
-      Integer, ALLOCATABLE :: ispar(:)    !  (2*S+1)              
-      Integer, ALLOCATABLE :: ipar (:)    !  parity (+1 | -1)             
-      Integer, ALLOCATABLE :: nch  (:)    !  number of channels           
-      Integer, ALLOCATABLE :: nch1 (:)    !  one-continuum                
-      Integer, ALLOCATABLE :: nch2 (:)    !  two-continuum                
+      Integer, allocatable :: lpar (:)    !  total L                      
+      Integer, allocatable :: ispar(:)    !  (2*S+1)              
+      Integer, allocatable :: ipar (:)    !  parity (+1 | -1)             
+      Integer, allocatable :: nch  (:)    !  number of channels           
+      Integer, allocatable :: nch1 (:)    !  one-continuum                
+      Integer, allocatable :: nch2 (:)    !  two-continuum                
     
-      CHARACTER(3), ALLOCATABLE :: Tpar(:)   !  spectroscopic notation 
+      CHARACTER(3), allocatable :: Tpar(:)   !  spectroscopic notation 
 
-      Integer, Allocatable :: iptar(:),ipconf(:),lch1(:),lch2(:)
-      Integer, Allocatable :: chsym(:),chL(:),chS(:)
-      CHARACTER(4), ALLOCATABLE :: ELC1(:),ELC2(:)
+      Integer, allocatable :: iptar(:),ipconf(:),lch1(:),lch2(:)
+      Integer, allocatable :: chsym(:),chL(:),chS(:)
+      CHARACTER(4), allocatable :: ELC1(:),ELC2(:)
  	
       !   iptar -  pointer on the target state
       !   lch   -  small l for given channel
       !   ELC   -  spectroscopic symbol for given channel
       !   ipconf-  pointer on the last configuration for this channel
 	
-      Integer, ALLOCATABLE :: ipch(:)     !  partial wave pointer
+      Integer, allocatable :: ipch(:)     !  partial wave pointer
 
       !   perturber information
 
-      Integer, Allocatable :: ncp(:)
-      Integer, Allocatable :: nwp(:)
-      CHARACTER(20), Allocatable :: AFP(:),BFP(:) 
+      Integer, allocatable :: ncp(:)
+      Integer, allocatable :: nwp(:)
+      CHARACTER(20), allocatable :: AFP(:),BFP(:) 
       
       Integer :: mch = 0  !  max.number of channels                 
 
 !      Character(3) :: ALSP,BLSP
 
-      END MODULE channels_dc
+      End Module channels_dc
 
 
 !=======================================================================    
-    Subroutine Alloc_channels_dc
+      Subroutine Alloc_channels_dc
 !=======================================================================    
-        
-    Use channels_dc
+!     allocate arrays in the module "channels_dc"
+!-----------------------------------------------------------------------        
+      Use channels_dc
 
-    if(nlsp.le.0) Stop ' Alloc_channels_dc: nlsp <= 0 '
-    if(mlsp.le.0) Stop ' Alloc_channels_dc: mlsp <= 0 '
+      if(nlsp.le.0) Stop ' Alloc_channels_dc: nlsp <= 0 '
+      if(mlsp.le.0) Stop ' Alloc_channels_dc: mlsp <= 0 '
 
-    Allocate(lpar(nlsp),ispar(nlsp),ipar(nlsp),Tpar(nlsp),&
+      Allocate(lpar(nlsp),ispar(nlsp),ipar(nlsp),Tpar(nlsp),&
              nch(nlsp),nch1(nlsp),nch2(nlsp), &
              ipch(nlsp),iptar(mlsp),ipconf(mlsp), &
              chsym(mlsp),chL(mlsp),chS(mlsp), &
              ELC1(mlsp), ELC2(mlsp), lch1(mlsp),lch2(mlsp), &
              AFP(nlsp),BFP(nlsp),ncp(nlsp),nwp(nlsp))
 
-    End subroutine Alloc_channels_dc
+      End subroutine Alloc_channels_dc
+
 
 !======================================================================
       Subroutine Read_channels_dc(nut)
 !======================================================================
 !     read from file 'nut' channels information 
 !----------------------------------------------------------------------
-
-      USE channels_dc
+      Use channels_dc
       
       Integer, Intent(in) :: nut
       Character(20) :: AF

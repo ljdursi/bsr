@@ -1,12 +1,62 @@
 !=========================================================================
-      SUBROUTINE define_grid(z)
+      Subroutine read_grid(z)
 !=========================================================================
 !     gets input data for the grid and sets up the spline knots 
 !     Requires file  'knot.dat' with grid parameters 
 ! -------------------------------------------------------------------------
-      USE spline_param
-      USE spline_grid
-      IMPLICIT NONE
+      Use spline_param
+      Use spline_grid
+      Implicit none
+      Real(8) :: z
+
+      Call Check_file(AF_grid)
+      Open(nug,file=AF_grid)
+
+      grid_type = 0
+      Call Read_ipar(nug,'grid_type',grid_type)      
+
+      Select case(grid_type)
+       
+       Case(0)
+
+        rewind(nug)
+        read(nug,*) ks
+        read(nug,*) ns
+        read(nug,*) z
+        read(nug,*) h
+        read(nug,*) hmax
+        read(nug,*) rmax
+
+        Call mkgrid(z)
+
+       Case(1)
+
+        Call Read_ipar(nug,'ks',ks)      
+        Call Read_ipar(nug,'ns',ns)      
+        Call Read_rpar(nug,'z' ,z)      
+        Call Read_rpar(nug,'h' ,h)      
+        Call Read_rpar(nug,'hmax',hmax)      
+        Call Read_rpar(nug,'rmax',rmax)      
+
+        Call mkgrid1(z)
+
+      End Select
+
+      Close(nug)
+
+      End Subroutine read_grid
+
+
+
+!=========================================================================
+      Subroutine define_grid(z)
+!=========================================================================
+!     gets input data for the grid and sets up the spline knots 
+!     Requires file  'knot.dat' with grid parameters 
+! -------------------------------------------------------------------------
+      Use spline_param
+      Use spline_grid
+      Implicit none
       Real(8) :: z
       Logical :: EX
 
@@ -15,11 +65,11 @@
       Inquire(file=AF_grid,exist=EX)
 
       if(.not.EX) then
-       CALL mkgrid1(z)
+       Call mkgrid1(z)
        Open(nug,file=AF_grid)
        Call Print_grid_01(z)
        Stop 'check knot.dat file for splines parameters ...'
-      end if 
+      End if 
 
       Open(nug,file=AF_grid); Rewind(nug)
 
@@ -36,17 +86,16 @@
 
       Close(nug)
 
-      END SUBROUTINE define_grid
+      End Subroutine define_grid
 
 
 !=========================================================================
-      SUBROUTINE define_grid_00(z)
+      Subroutine define_grid_00(z)
 !=========================================================================
+      Use spline_param
+      Use spline_grid
 
-      USE spline_param
-      USE spline_grid
-
-      IMPLICIT NONE
+      Implicit none
 
       Real(8) :: z
 
@@ -60,7 +109,7 @@
 
 ! ... set up the knots for spline
 
-      CALL mkgrid(z)
+      Call mkgrid(z)
 
 ! ... print grid in the file 'knot.dat'
 
@@ -77,34 +126,30 @@
       write(nug,'(i12,a)') ml,' ==>  number of distinct knots from 0 to 1 (=1/h)'
       write(nug,'(i12,a)') me,' ==>  number of knots in the exponential region '
       write(nug,'(i12,a)') nv,' ==>  number of intervals '
-      write(nug,'(f12.5,a)') (1/hmax)**2,' ==>  max k^2 (Ry) '
+      write(nug,'(f12.5,a)') (1/hmax)**2*3,' ==>  max k^2 (Ry) '
 
 
-      END SUBROUTINE define_grid_00
+      End Subroutine define_grid_00
 
 
 !=====================================================================
-    SUBROUTINE mkgrid(z)
+      Subroutine mkgrid(z)
 !=====================================================================
-!
-!   sets up the knots for spline (original version)
-!
+!     sets up the knots for spline (original version)
 !---------------------------------------------------------------------
+      Use spline_param
+      Use spline_grid
 
-      USE spline_param
-      USE spline_grid
-
-      IMPLICIT NONE
-
-      INTEGER(4) :: n, i, m, me1, me2, nt
-      REAL(8):: z,hp1, h2, tmax, tx, h0
+      Implicit none
+      Integer :: n, i, m, me1, me2, nt
+      Real(8) :: z,hp1, h2, tmax, tx, h0
 
       ! .. determine ml, the number of distinct points from 0 to 1
 
-       h0 = h
-       ml = 1.d0/h + 0.1
-       h = 1.d0/ml
-       hp1 = 1.d0 + h
+      h0 = h
+      ml = 1.d0/h + 0.1
+      h = 1.d0/ml
+      hp1 = 1.d0 + h
 
       ! .. determine tmax
 
@@ -126,7 +171,7 @@
         tx = hp1**me
         h2 = h*tx/hp1
         m = NINT((tmax-tx)/h2)
-      END IF
+      End IF
 
       n = ml + me + m + ks -1
       ns = n
@@ -135,19 +180,19 @@
 
       ! .. establish the grid for z*r
 
-      ALLOCATE (t(nt)); t = 0.d0
+      Allocate (t(nt)); t = 0.d0
 
-      DO i = ks+1, ks+ml
+      Do i = ks+1, ks+ml
         t(i) = t(i-1) + h0
-      END DO
+      End do
 
-      DO i = ks+ml+1, ks+me+ml
+      Do i = ks+ml+1, ks+me+ml
         t(i) = t(i-1)*hp1
-      END DO
+      End DO
 
-      DO i = ks+me+ml+1, n+1
+      Do i = ks+me+ml+1, n+1
         t(i) = t(i-1) + h2
-      END DO
+      End do
       t(n+2:nt) = t(n+1)
 
       ! .. scale the values to the R variable
@@ -155,17 +200,16 @@
       t = t/z
       hmax = hmax/z
 
-    END SUBROUTINE mkgrid
+      End Subroutine mkgrid
+
 
 !=========================================================================
-      SUBROUTINE define_grid_01(z)
+      Subroutine define_grid_01(z)
 !=========================================================================
+      Use spline_param
+      Use spline_grid
 
-      USE spline_param
-      USE spline_grid
-
-      IMPLICIT NONE
-
+      Implicit none
       Real(8) :: z
 
       Call Read_ipar(nug,'ks',ks)      
@@ -183,18 +227,16 @@
 
       Call Print_grid_01(z)
 
-      END SUBROUTINE define_grid_01
+      End Subroutine define_grid_01
 
 
 !=========================================================================
-      SUBROUTINE Print_grid_01(z)
+      Subroutine Print_grid_01(z)
 !=========================================================================
+      Use spline_param
+      Use spline_grid
 
-      USE spline_param
-      USE spline_grid
-
-      IMPLICIT NONE
-
+      Implicit none
       Real(8) :: z
 
       rewind(nug)
@@ -212,36 +254,33 @@
       write(nug,'(i12,a)') ml,' ==>  number of distinct knots from 0 to 1 (=1/h)'
       write(nug,'(i12,a)') me,' ==>  number of knots in the exponential region '
       write(nug,'(i12,a)') nv,' ==>  number of intervals '
-      write(nug,'(f12.5,a)') (1/hmax)**2,' ==>  max k^2 (Ry) '
+      write(nug,'(f12.5,a)') (1/hmax)**2*3,' ==>  max k^2 (Ry) '
 
-      END SUBROUTINE Print_grid_01
+      End Subroutine Print_grid_01
 
 
 !=====================================================================
-      SUBROUTINE mkgrid1(z)
+      Subroutine mkgrid1(z)
 !=====================================================================
-!
 !     sets up the knots for splines in semi-exponential grid:
-!
 !-----------------------------------------------------------------------
+      Use spline_param
+      Use spline_grid
 
-      USE spline_param
-      USE spline_grid
-
-      IMPLICIT NONE
-      INTEGER(4):: i,nt
+      Implicit none
+      Integer:: i,nt
       Real(8) :: z 
 
       rmax = rmax * z
       hmax = hmax * z
       nt = (rmax / h + 1 + ks)*2
       if(Allocated(t)) Deallocate(t)
-      ALLOCATE (t(nt))
+      Allocate (t(nt))
       t = 0.d0
       ns = ks
 	  
 ! ... determine ml, the number of intervals from 0 to 1
-! ... first make sure that h = 1/n as recomended
+! ... first make sure that h = 1/n as recomEnded
 
       ml = 1.d0/h + 0.5;  h = 1.d0/ml
       Do i=1,ml 
@@ -268,13 +307,13 @@
         ns = ns + 1
         if(t(ns).ge.rmax) Exit
        End do
-      end if
+      End if
 
       if(t(ns).gt.rmax) then
        ns = ns - 1; me = me - 1
        t(ns+1:ns+ks) = rmax
        t(ns) = (t(ns+1)+t(ns-1))/2.d0
-      end if
+      End if
 
       nv = ns - ks + 1
 
@@ -284,7 +323,7 @@
       hmax = hmax / z
       rmax = rmax / z
 
-      END SUBROUTINE mkgrid1
+      End Subroutine mkgrid1
 
 
 

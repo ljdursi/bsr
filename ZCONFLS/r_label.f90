@@ -3,13 +3,10 @@
 !======================================================================
 !     generates LABEL list from c-file (unit nu)
 !----------------------------------------------------------------------
-
-      USE conf_LS
+      Use conf_LS
 
       Implicit none
-      
-      Integer, INTENT(in) :: nu,ii,kset
-
+      Integer, intent(in) :: nu,ii,kset
       Integer :: nc
       
       if(allocated(Label)) Deallocate(Label)

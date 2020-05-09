@@ -1,9 +1,9 @@
 !===========================================================================
-      MODULE dcs_pseudo
+      Module dcs_pseudo
 !===========================================================================
-!     define overlaps for ion scattering channels 
+!     contain arrays required for differential cross sections
+!     in case of many pseudo-states
 !---------------------------------------------------------------------------
-    
       Implicit none
 
       Integer :: nps  = 0                 !  number of psedo_states              
@@ -26,7 +26,7 @@
 
       Real(8)  :: eps_ek = 1.d-7 
 
-      END MODULE dcs_pseudo
+      End Module dcs_pseudo
 
 
 !======================================================================
@@ -34,11 +34,9 @@
 !======================================================================
 !     read from file AF dcs information for pseudo-states
 !----------------------------------------------------------------------
-
-      USE dcs_pseudo
+      Use dcs_pseudo
       
       Implicit none
-      
       Character(*) :: AF
       Character(200) :: AS
       Integer :: nu,i,k,l,m, ig,is

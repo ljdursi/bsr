@@ -1,9 +1,9 @@
 !======================================================================
       Integer Function Incode_INT (met,k,I1,I2,I3,I4)
 !======================================================================
-!     incode the integral
+!     incode the two-electron integral:  Rk(i1,i2;i3,i4)
+!     met -> type of integral
 !----------------------------------------------------------------------
- 
       Implicit none
       Integer :: ib4=2**4, ib5=2**5, ib6=2**6
       Integer, intent(in) :: met,k,I1,I2,I3,I4       
@@ -18,9 +18,9 @@
 !======================================================================
       Subroutine Decode_INT (met,k,I1,I2,I3,I4,int)
 !======================================================================
-!     decode the integral
+!     decode the two-electron integral:  Rk(i1,i2;i3,i4)
+!     met -> type of integral
 !----------------------------------------------------------------------
- 
       Implicit none
       Integer :: ib4=2**4, ib5=2**5
       Integer, Intent(in)  :: int
@@ -38,9 +38,8 @@
 !======================================================================
       Subroutine Decode_met(met,int)
 !======================================================================
-!     decode the integral
+!     decode just "type" of the two-electron integral
 !----------------------------------------------------------------------
- 
       Implicit none
       Integer :: ib4=2**4, ib20=2**20
       Integer, Intent(in)  :: int
@@ -53,11 +52,13 @@
 !======================================================================
       Integer Function Incode_mult (itype,i1,i2)
 !======================================================================
-!     incode the dipole integral
+!     incode the multipole integral:  d (i1,i2)
+!     itype = 0  -  overlap
+!           = 1  -  electric multipole
+!           = 2  -  magnetic multipole
+!           = 3  -  ???
 !----------------------------------------------------------------------
- 
       Implicit none
-
       Integer, intent(in) :: itype,i1,i2       
       Integer :: jb=2**10
 
@@ -80,11 +81,13 @@
 !======================================================================
       Subroutine Decode_mult (itype,i1,i2,int)
 !======================================================================
-!     decode the dipole integral
+!     decode the multipole integral:  d (i1,i2)
+!     itype = 0  -  overlap
+!           = 1  -  electric multipole
+!           = 2  -  magnetic multipole
+!           = 3  -  ???
 !----------------------------------------------------------------------
- 
       Implicit none
-
       Integer, Intent(in) :: int
       Integer, Intent(out) :: itype,i1,i2 
       Integer :: jb=2**10, k

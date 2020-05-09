@@ -1,5 +1,5 @@
 !======================================================================
-      MODULE symt_list_LS
+      Module symt_list_LS
 !======================================================================
 !
 !     Containes the configuration symmetries.
@@ -13,7 +13,6 @@
 !                Read_oper_LS   (nu)
 !                no_term_LS     (ic)      
 !----------------------------------------------------------------------
-
       Use param_LS
 
       Implicit none
@@ -25,42 +24,47 @@
       Integer :: ksymt = 0       ! dimension of all symt.s 
       Integer :: lsymt = 0       ! last element 
       
-      Integer, Allocatable :: IT_conf(:)   ! configuration pointer
-      Integer, Allocatable :: ip_term(:)   ! position pointer
-      Integer, Allocatable :: LS_term(:,:) ! main array of LS terms  
+      Integer, allocatable :: IT_conf(:)   ! configuration pointer
+      Integer, allocatable :: ip_term(:)   ! position pointer
+      Integer, allocatable :: LS_term(:,:) ! main array of LS terms  
 
 ! ... IT_stat     - additonal index
 
-      Integer, Allocatable :: IT_stat(:)
+      Integer, allocatable :: IT_stat(:)
 
 ! ... IT_sort     - provides ordering of terms according to configurations
 
-      Integer, Allocatable :: IT_sort(:)
+      Integer, allocatable :: IT_sort(:)
 
 ! ... IT_done(:) - pointer on the done calculation for specific
 !                  operators and given terms
 
-      Integer(1), Allocatable :: IT_done(:)
+      Integer(1), allocatable :: IT_done(:)
 
-      Integer(1), Allocatable :: IT_oper(:,:)
+      Integer(1), allocatable :: IT_oper(:,:)
+
 
 ! ... IT_need(:) - define the need of calc. for the given term.symmetry
 
-      Integer(1), Allocatable :: IT_need(:), JT_need(:)
+      Integer(1), allocatable :: IT_need(:), JT_need(:)
 
+      Real(8) :: mem_symt = 0.d0,  mem_oper = 0.d0
       Integer :: m_symt
 
-      End MODULE symt_list_LS
+      Integer(8) :: ij, ij_oper, ii8, jj8
+
+      End Module symt_list_LS
 
 
 !======================================================================
       Subroutine alloc_symt_LS(m)
 !======================================================================
-
+!     allocate arrays in the module "symt_list_LS"
+!----------------------------------------------------------------------
       Use symt_list_LS
 
       Implicit none
-      Integer, Intent(in) :: m
+      Integer, intent(in) :: m
       Integer, allocatable :: ia(:),ib(:,:)
 
       if(m.le.0) then
@@ -94,9 +98,30 @@
        Deallocate(ib)
       end if
 
-      m_symt = 3*msymt + 5*ksymt 
+      mem_symt = (3.*msymt + 5.*ksymt)*4/(1024*1024) 
+      m_symt = 3*msymt + 5*ksymt
 
       End Subroutine alloc_symt_LS
+
+
+!======================================================================
+      Subroutine alloc_it_oper_LS(m)
+!======================================================================
+      Use symt_list_LS
+
+      Implicit none
+      Integer, intent(in) :: m
+
+      if(allocated(it_oper)) Deallocate(it_oper)
+      mem_oper=0.d0       
+      if(m.le.0) Return
+
+      ij = nsymt; ij_oper =  ij*(ij+1)/2
+      Allocate(it_oper(noper,ij_oper))
+      it_oper = 0
+      mem_oper = 1.d0*(noper+1)*ij_oper/(1024*1024)
+
+      End Subroutine alloc_it_oper_LS
 
 
 !======================================================================
@@ -104,13 +129,12 @@
 !======================================================================
 !     add new overlap conf.symmetry to symt_list_LS
 !----------------------------------------------------------------------
-
       Use symt_list_LS
 
       Implicit none 
       Integer :: iconf,no, i,j,ip,jp
       Integer :: LS(msh,5)
-      Integer, External :: no_conf_LS
+      Integer, external :: no_conf_LS
 
       Iadd_symt_LS = 0
       if(no.le.0) Return
@@ -145,18 +169,18 @@
 
       End Function Iadd_symt_LS
 
+
 !======================================================================
       Subroutine Get_symt_LS(it,iconf,no,LS)
 !======================================================================
 !     extrats term symetry 'it'                  
 !----------------------------------------------------------------------
-
       Use symt_list_LS
 
       Implicit none 
       Integer :: it,iconf, no, i,j,ip
       Integer :: LS(msh,5)
-      Integer, External :: no_conf_LS
+      Integer, external :: no_conf_LS
       
       if(it.le.0.or.it.gt.nsymt) Stop 'Get_symt_LS: <it> is out of range'
 
@@ -167,10 +191,10 @@
 
       End Subroutine Get_symt_LS
 
+
 !======================================================================
       Subroutine Read_symt_LS(nu)
 !======================================================================
-
       Use symt_list_LS 
 
       Implicit none
@@ -185,13 +209,14 @@
       read(nu) (LS_term(i,:),i=1,lsymt)
       IT_stat = 0
 
+      mem_symt = (3.*msymt + 5.*ksymt)*4/(1024*1024) 
+
       End Subroutine Read_symt_LS
 
 
 !======================================================================
       Subroutine Write_symt_LS(nu)
 !======================================================================
-
       Use symt_list_LS 
 
       Implicit none
@@ -209,7 +234,6 @@
 !======================================================================
       Subroutine Write_oper_LS(nu)
 !======================================================================
-
       Use symt_list_LS 
 
       Implicit none
@@ -227,10 +251,47 @@
 
       End Subroutine Write_oper_LS
 
+
+!======================================================================
+      Subroutine Record_oper_LS(nu)
+!======================================================================
+      Use symt_list_LS 
+
+      Implicit none
+      Integer, intent(in) :: nu
+      Integer :: j
+
+      write(nu) ij_oper
+      Do ij = 1,ij_oper
+       Do j=1,noper
+        if(IT_oper(j,ij).eq. 0) IT_oper(j,ij)=1
+        if(IT_oper(j,ij).eq.-1) IT_oper(j,ij)=0
+       End do 
+      End do
+      write(nu) IT_oper
+
+      End Subroutine Record_oper_LS
+
+
+!======================================================================
+      Subroutine Load_oper_LS(nu)
+!======================================================================
+      Use symt_list_LS 
+
+      Implicit none
+      Integer, intent(in) :: nu
+      Integer(8) :: i,j
+
+      read(nu) ij
+      if(ij_oper.lt.ij) Stop 'Read_oper_LS: nsymt too small' 
+      read(nu) ((IT_oper(i,j),i=1,noper),j=1,ij)
+
+      End Subroutine Load_oper_LS
+
+
 !======================================================================
       Subroutine Read_oper_LS(nu)
 !======================================================================
-
       Use symt_list_LS 
 
       Implicit none
@@ -248,7 +309,6 @@
 !======================================================================
       Subroutine Write_done_LS(nu)
 !======================================================================
-
       Use symt_list_LS, only: nsymt, IT_done 
 
       Implicit none
@@ -267,7 +327,6 @@
 !======================================================================
       Subroutine Read_done_LS(nu)
 !======================================================================
-
       Use symt_list_LS, only: IT_done 
 
       Implicit none
@@ -297,7 +356,6 @@
 !======================================================================
 !     number of shells in state 'iconf'                   
 !----------------------------------------------------------------------
-
       Use symt_list_LS
 
       Implicit none 

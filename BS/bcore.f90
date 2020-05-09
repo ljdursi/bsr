@@ -16,35 +16,35 @@
 
       EC = zero
 
-      DO I = 1,NCLOSD
+      Do I = 1,NCLOSD
 
        SUMI = 4*L(I)+2
        TI = RKy(I,I,I,I,0)
 
-       DO K = 2,2*L(I),2
+       Do K = 2,2*L(I),2
         CA = ZCB(L(i),K,L(i)) * (2*L(i)+1)/(4*L(i)+1)
         TI = TI - CA*RKy(I,I,I,I,k)
-       END DO
+       End do
 
        EC = EC + SUMI*((SUMI-1)*TI - BHL(I,I)) / two
 
-       DO J = 1,I-1
+       Do J = 1,I-1
          SUMJ = 4*L(J)+2
          TIJ = RKy(I,J,I,J,0)
-         DO K=IABS(L(I)-L(J)),L(I)+L(J),2
+         Do K=IABS(L(I)-L(J)),L(I)+L(J),2
            CB = ZCB(L(i),K,L(j))/two
            TIJ = TIJ - CB*RKy(I,J,J,I,k)
-         END DO
+         End do
          EC = EC + SUMI*SUMJ*TIJ
-       END DO
+       End do
 
-      END DO
+      End do
 
 !----------------------------------------------------------------------
 !                                                     o-o  interaction:
       if(ioo.eq.0) Return
 
-      DO I = 1,NCLOSD
+      Do I = 1,NCLOSD
 
         if(L(i).eq.0) Cycle
         SUMI = 4*L(I)+2
@@ -56,22 +56,22 @@
         if(L(I).eq.3) TI = + 48.D0/ 13.D0  * NKy(I,I,I,I,0) &
                            + 16.D0/ 13.D0  * NKy(I,I,I,I,2) &
                            + 80.D0/143.D0  * NKy(I,I,I,I,4)
-        DO K = 2,2*L(I),2
+        Do K = 2,2*L(I),2
          CA = ZCB(L(i),K,L(i)) * (2*L(i)+1)/(4*L(i)+1)
          SN = NKy(i,i,i,i,k) 
          SN2 = NKy(i,i,i,i,k-2) 
          c1 =-one*(k+3)/(k+1)/(k+k+3)
          c2 = one*(k-2)/k/(k+k-1)
          TI = TI + CA*(c1*SN-c2*SN2)
-        END DO
+        End do
 
         EC = EC + SUMI*(SUMI-1)*TI/two
 
-        DO J = 1,I-1
+        Do J = 1,I-1
          if(L(i).eq.0) Cycle
          SUMJ = 4*L(J)+2
          TIJ = zero
-         DO K=IABS(L(I)-L(J)),L(I)+L(J),2
+         Do K=IABS(L(I)-L(J)),L(I)+L(J),2
            CB = ZCB(L(i),K,L(j))
            SN = NKy(i,j,j,i,k)
            CN = CB*(L(i)+L(j)+k+2)*(L(i)+L(j)-k)   &
@@ -98,12 +98,12 @@
            c1 =-cn*(k+3)/(k+1)/(k+k+3)
            c2 = cn*(k-2)/k/(k+k-1)
            TIJ = TIJ + c1*SN + c2*SN2 
-         END DO
+         End do
 
          EC = EC + SUMI*SUMJ*TIJ
 
-       END DO
+       End do
 
-      END DO
+      End do
 
       End Subroutine BCORE

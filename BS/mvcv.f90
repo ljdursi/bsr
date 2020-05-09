@@ -28,7 +28,7 @@
     REAL(8), INTENT(inout), Dimension(ns,ks) :: vc
 
     INTEGER(4) :: m, ith, jth, i, irow, jcol
-    REAL(8) :: fll, y1, y2, S, B
+    REAL(8) :: fll, y1, y2, S
     Real(8), External :: AZL
 
     ! .. initialize the vc array

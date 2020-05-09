@@ -4,19 +4,19 @@
 !   Value of B_(lp+1)/r^lp at r = 0 where lp = l+1
 !----------------------------------------------------------------------
     Implicit none
-    INTEGER, INTENT(in) :: ks,lp
-    REAL(8), INTENT(in) :: z,h
-    INTEGER :: j
-    REAL(8) :: c
+    Integer, intent(in) :: ks,lp
+    Real(8), intent(in) :: z,h
+    Integer :: j
+    Real(8) :: c
 
-    IF (lp < ks ) THEN
+    if (lp < ks ) then
       azl = 1.d0
       c = z/h
-      do j = 1,lp
+      Do j = 1,lp
         azl = (azl*c*(ks-j))/(j*j)
-      end do
-    ELSE
+      End do
+    else
       azl = 0.d0
-    END IF
+    end if
 
-   END FUNCTION azl
+    End Function azl

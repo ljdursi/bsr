@@ -41,6 +41,16 @@
 ! ... memory requirements (in 4b words):
 
       Integer :: m_borb = 0
+      Real(8) :: memory_BS_orbitals = 0.d0
+
+! ... overlaps between bound and continuum orbitals:
+! ... (with <.|i> vectors if any):
+
+      Integer :: nv_ch = 0
+      Real(8), allocatable :: V_ch(:,:)
+      Integer, allocatable :: i_ch(:),j_ch(:)
+      Integer, parameter   :: ib = 2**15  
+      Real(8) :: eps_v = 1.d-10
 
       END MODULE spline_orbitals
 

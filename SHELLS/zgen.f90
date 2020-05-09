@@ -2,18 +2,17 @@
       Real(8) Function ZGEN (Q,L,N1,N2)
 !--------------------------------------------------------------------
 !     Coefficients of fractional parentage:   (l,q,v'S'L'|}l,q+1,vLS)
-!     N1,N2 - index of v'L'S' and vLS terms in corresponding lists
+!     N1,N2 - index of v'L'S' and vLS terms in the corresponding lists
 !--------------------------------------------------------------------
-
       Implicit none
       Integer, intent(in) :: Q,L,N1,N2
       Integer IV(375), IPV(7)
-      Real(8) :: R,S
-      Real(8), External :: gen_p3,gen_p4,gen_p5
-      Real(8), External :: gen_d3,gen_d4,gen_d5,gen_d6,gen_d7,gen_d8,gen_d9
-      Real(8), External :: gen_f3,gen_f4,gen_f5,gen_f6,gen_f7
-      Integer :: i,n,IA1,IL1,IS1,IA2,IL2,IS2
-      Integer, External :: Iterm_LS
+      Real(8) :: S
+      Real(8), external :: gen_p3,gen_p4,gen_p5
+      Real(8), external :: gen_d3,gen_d4,gen_d5,gen_d6,gen_d7,gen_d8,gen_d9
+      Real(8), external :: gen_f3,gen_f4,gen_f5,gen_f6,gen_f7
+      Integer :: i,IA1,IL1,IS1,IA2,IL2,IS2
+      Integer, external :: Iterm_LS
 
       ZGEN=1.d0
 

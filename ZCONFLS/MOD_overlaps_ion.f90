@@ -1,9 +1,8 @@
 !===========================================================================
-      MODULE overlaps_ion
+      Module overlaps_ion
 !===========================================================================
 !     define overlaps for ion scattering channels 
 !---------------------------------------------------------------------------
-    
       Implicit none
 
       Integer :: novl =  0                !  number of overlaps               
@@ -19,7 +18,7 @@
 
       Real(8), parameter   :: eps_e = 1.d-7 
 
-      END MODULE overlaps_ion
+      End Module overlaps_ion
 
 
 !======================================================================
@@ -27,12 +26,10 @@
 !======================================================================
 !     read from file 'nut' overlaps information 
 !----------------------------------------------------------------------
-
-      USE overlaps_ion
+      Use overlaps_ion
       
       Implicit none
-      
-      Integer, Intent(in) :: nut,mch,ntarg
+      Integer, intent(in) :: nut,mch,ntarg
       Character(80) :: line
       Integer :: i,j,m,n
  
@@ -70,16 +67,14 @@
 !======================================================================
       Subroutine Find_overlap(ion_state,ii_ion,E,or,oi,phase)
 !======================================================================
-!     read from file 'nut' overlaps information 
+!     find required overlap
 !----------------------------------------------------------------------
-
-      USE overlaps_ion
+      Use overlaps_ion
       
       Implicit none
-      
-      Integer, Intent(in) :: ion_state,ii_ion
-      Real(8), Intent(in) :: E
-      Real(8), Intent(out) :: or,oi,phase
+      Integer, intent(in) :: ion_state,ii_ion
+      Real(8), intent(in) :: E
+      Real(8), intent(out) :: or,oi,phase
       Integer :: i
 
       or = 0.d0; oi = 0.d0; phase = 0.d0
@@ -93,7 +88,6 @@
        Exit
       End do 
 
-
       End Subroutine Find_overlap
 
 
@@ -102,14 +96,12 @@
 !======================================================================
 !     find <psedo|continuum>^2  for ion states (ntarg) 
 !----------------------------------------------------------------------
-
-      USE overlaps_ion
+      Use overlaps_ion
       
       Implicit none
-      
-      Integer, Intent(in) :: ilsp_ion,ntarg
-      Real(8), Intent(in) :: E
-      Real(8), Intent(out) :: ot(ntarg)
+      Integer, intent(in) :: ilsp_ion,ntarg
+      Real(8), intent(in) :: E
+      Real(8), intent(out) :: ot(ntarg)
       Integer :: i
 
       ot = 0.d0
@@ -119,7 +111,8 @@
        ot(1:ntarg) = ovlt(1:ntarg,i)
        Exit
       End do 
-!      if(SUM(ot).eq.0.d0) Stop 'Find_ovl_ion - ?' 
+
+!     if(SUM(ot).eq.0.d0) Stop 'Find_ovl_ion - ?' 
 
       End Subroutine Find_ovl_ion
 

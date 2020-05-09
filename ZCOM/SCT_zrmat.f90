@@ -2,7 +2,7 @@
       Subroutine ZRMAT(E,RA,nch,nhm,RMAT,VALUE,WMAT)
 !=======================================================================
 !     CALCULATE THE R-MATRIX FOR GIVEN ENERGY "E" BASED ON THE
-!     SURFACE AMPLITUDES AND EIGENVALUES 
+!     EIGENVALUES (VALUE) AND SURFACE AMPLITUDES (WMAT)  AT RADIUS 'RA'  
 !-----------------------------------------------------------------------
       Implicit none
       Real(8), intent(in)  :: E,RA
@@ -19,10 +19,10 @@
       A = 1.d0/RA
       DO K = 1,nhm
         B = A / (VALUE(K)-E)
-        DO I = 1,nch
-          C = WMAT(I,K)*B
-          DO J = 1,nch
-           RMAT(I,J) = RMAT(I,J) + WMAT(J,K)*C
+        DO J = 1,nch
+          C = WMAT(J,K)*B
+          DO I = 1,nch
+           RMAT(I,J) = RMAT(I,J) + WMAT(I,K)*C
           END DO
         END DO
       END DO

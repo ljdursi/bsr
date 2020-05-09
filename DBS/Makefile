@@ -13,11 +13,12 @@ S  =	DBS_nuclear.f90          DBS_grid.f90             DBS_gauss.f90            
 	mrk_pppp.f90             mrk_pqpq.f90             mrk_qpqp.f90             \
 	mrk_qqqq.f90             msk_ppqq.f90             msk_pqqp.f90             \
 	pri_int.f90              quadr.f90                quadr_pq.f90             \
-        read_pqbs.f90            rk_pq.f90                rk.f90                   \
-        sk.f90                   sk_pq.f90                sum_amb.f90              \
+	read_pqbs.f90            rk_pq.f90                rk.f90                   \
+	sk.f90                   sk_pq.f90                sum_amb.f90              \
 	tvm.f90                  update_hs.f90            zbsplvd.f90              \
 	zint.f90                 zinty.f90                vinty.f90                \
-        DBS_mult.f90             gen_hd.f90
+	DBS_mult.f90             gen_hd.f90
+
 #        ykf.f90
 	
  
@@ -26,7 +27,7 @@ O = $(S:.f90=.o)
 $(N).a : $(O)
 	ar rv $(N).a $(O)
 	cp $(N).a $(LIBDIR)
-#	rm *.o *.a
+	rm *.o *.a
  
 clean:
 	rm  *.o *.mod *.a *~  

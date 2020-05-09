@@ -16,17 +16,16 @@
 !    sym_j  ->  symmetry in respect of j,j' variables ('s', 'n')
 !
 !----------------------------------------------------------------------
-      USE spline_integrals, only: rkb
+      Use spline_integrals, only: rkb
 
-      IMPLICIT NONE
+      Implicit none
+      Integer, intent(in) :: ns,ks,icase
+      Character, intent(in) :: sym_i,sym_j
+      Real(8), intent(in ) :: d(ns,*)
+      Real(8), intent(out) :: a(ns,*)
 
-      INTEGER, INTENT(in) :: ns,ks,icase
-      CHARACTER(1), INTENT(in) :: sym_i,sym_j
-      REAL(8), DIMENSION(ns,*), INTENT(in ) :: d
-      REAL(8), DIMENSION(ns,*), INTENT(out) :: a
-
-      INTEGER :: i,j, ip,jp, imin,imax, jmin,jmax, ii,jj
-      REAL(KIND=8) :: c
+      Integer :: i,j, ip,jp, imin,imax, jmin,jmax, ii,jj
+      Real(8) :: c
 
 
       if(icase.gt.2) a(1:ns,1:ns) = 0.d0
@@ -302,7 +301,7 @@
         end do
       end do
 
-    elseif(sym_i.eq.'s'.and.sym_j.eq.'n'.and.icase.eq.4) then
+     elseif(sym_i.eq.'s'.and.sym_j.eq.'n'.and.icase.eq.4) then
 
       do jp = 1,ks+ks-1
         jmin=max( 1, 1 + ks-jp)

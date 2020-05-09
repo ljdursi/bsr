@@ -1,9 +1,8 @@
 !===========================================================================
-      MODULE channels
+      Module channels
 !===========================================================================
 !     contains scattering channels information 
 !---------------------------------------------------------------------------
-    
       Implicit none
 
       Integer :: nlsp =  0                !  number of partial waves               
@@ -19,7 +18,7 @@
       Integer, allocatable :: ipch(:,:)   !  pointer on the place in the common list of orbitals
 
       Integer, allocatable :: ipconf(:,:) !  pointer on the last configuration
-      Integer, allocatable :: jkch(:,:)   !  k-number in jK-coupling - (2*J+1) ???
+      Integer, allocatable :: jkch(:,:)   !  k-number in jK-coupling - (2*J+1) mode
 
       CHARACTER(3), allocatable :: Tpar(:)  ! spectroscopic notation for partial wave
       CHARACTER(4), allocatable :: ELC(:,:) ! spectroscopic symbol for channel orbital
@@ -39,25 +38,25 @@
       Integer, allocatable :: ippert(:)  ! pointer to the last configuration
       Integer :: mpert =0                ! max.dimension for ippert     
 
-      END MODULE channels
+      End Module channels
 
 
 !=======================================================================    
-    Subroutine Allocate_channels
+      Subroutine Allocate_channels
 !=======================================================================    
         
-    Use channels
+      Use channels
 
-    if(nlsp.le.0) Stop ' Allocate_channels: nlsp <= 0 '
-    if(mch.le.0) Stop ' Allocate_channels: mch <= 0 '
+      if(nlsp.le.0) Stop ' Allocate_channels: nlsp <= 0 '
+      if(mch.le.0) Stop ' Allocate_channels: mch <= 0 '
 
-    Allocate(ispar(nlsp),lpar(nlsp),ipar(nlsp),jpar(nlsp),Tpar(nlsp), &
+      Allocate(ispar(nlsp),lpar(nlsp),ipar(nlsp),jpar(nlsp),Tpar(nlsp), &
              nch(nlsp),iptar(nlsp,mch),lch(nlsp,mch),ipch(nlsp,mch),  &
              ELC(nlsp,mch), ipconf(nlsp,mch), jkch(nlsp,mch),         &
              AFP(nlsp),BFP(nlsp),ncp(nlsp),nwp(nlsp))
-    lch = 0
+      lch = 0
 
-    End subroutine Allocate_channels
+      End subroutine Allocate_channels
 
 
 !======================================================================
@@ -130,6 +129,7 @@
 
       End Subroutine R_channels
 
+
 !======================================================================
       Subroutine Write_channels_LS (nut,met,max_nc,max_wf)
 !======================================================================
@@ -157,7 +157,7 @@
        write(nut,'(i3,a,i5.3,a,i6,a,2i10)') ilsp,'.',ilsp,' nch = ',nch(ilsp), &
         ' nc = ',ipconf(ilsp,nch(ilsp)),ncp(ilsp)
        Do i = 1,nch(ilsp)
-        write(nut,'(a4,2x,3i6,2i8)') &
+        write(nut,'(3x,a4,2x,3i6,2i8)') &
          ELC(ilsp,i),lch(ilsp,i),iptar(ilsp,i),i,ipconf(ilsp,i),jkch(ilsp,i)
        End do
        write(nut,'(80(''-''))')

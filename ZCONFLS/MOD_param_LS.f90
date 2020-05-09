@@ -1,9 +1,8 @@
 !=====================================================================
-      MODULE param_LS
+      Module param_LS
 !=====================================================================
-!     main parameter in library ZCONF_LS
+!     main parameters in library ZCONFLS
 !---------------------------------------------------------------------
-
       Implicit none
 
       Integer, parameter :: msh = 25     ! max. number of shells behind core
@@ -11,6 +10,6 @@
       Integer, parameter :: noper=7      ! different operators
       Integer, parameter :: ksmax=61*61  ! max. set number,  see ASET in ELF4
        
-      END MODULE param_LS
+      End Module param_LS
 
 

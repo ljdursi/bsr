@@ -1,17 +1,14 @@
 !====================================================================
       Integer Function Iparity()
 !====================================================================
-!     defines parity for ZOI configuration in module 'conf_LS'
+!     defines parity for configuration in module 'conf_LS'
 !--------------------------------------------------------------------
-
-      USE conf_LS
+      Use conf_LS
 
       Implicit none
-      
       Integer :: i,m
 
       m=0; Do i=1,no;  m=m+ln(i)*iq(i);  End do
-
       Iparity=(-1)**m
 
       End Function Iparity
@@ -21,11 +18,9 @@
 !====================================================================
 !     defines parity for ZOI configuration in module 'conf_LS'
 !--------------------------------------------------------------------
-
-      USE conf_LS
+      Use conf_LS
 
       Implicit none
-      
       Integer :: k,i,m
 
       m = 0
@@ -43,17 +38,14 @@
 !====================================================================
       Integer Function Def_ne()
 !====================================================================
-!     defines parity for ZOI configuration in module 'configs'
+!     define number of electrons in configuration in module 'configs'
 !--------------------------------------------------------------------
+      Use conf_LS
 
-      USE conf_LS
-
-      IMPLICIT NONE
-      
+      Implicit none
       Integer :: i,m
 
       m=0; Do i=1,no;  m=m+iq(i);  End do
-
       Def_ne=m
 
       End Function Def_ne

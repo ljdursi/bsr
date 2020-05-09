@@ -3,7 +3,6 @@
 !=======================================================================
 ! ... orthogonality on l between config.1 and config.2
 !----------------------------------------------------------------------
-
       Use conf_LS
 
       Implicit none
@@ -23,6 +22,7 @@
 
       End Function Iort_conf
 
+
 !=======================================================================
       Subroutine Jort_conf(joper)
 !=======================================================================
@@ -34,7 +34,7 @@
 
       Implicit none
       Integer :: joper(7)
-	     Integer :: i,j,k     
+      Integer :: i,j,k     
       Integer, external :: Iort_conf, ITRI
 
       i=Iort_conf(); joper=i; if(i.eq.1) Return
@@ -51,12 +51,12 @@
 
       End Subroutine Jort_conf
 
+
 !=======================================================================
       Integer Function Kort_conf()
 !=======================================================================
 ! ... orthogonality on l between config.1 and config.2
 !----------------------------------------------------------------------
-
       Use conf_LS
 
       Implicit none
@@ -81,16 +81,15 @@
 !=======================================================================
 ! ... orthogonality for dipole transitions
 !----------------------------------------------------------------------
-
       Implicit none
       Integer, intent(in) :: kpol,L1,S1,P1,L2,S2,P2
       Character(1) :: ktype 
-      Integer :: k 
+      Integer :: k,m  
       Integer, external :: ITRA, ITRI
 
       Iort_dipol = 1
 
-       if(S1.ne.S2) Return
+       if(S1.ne.S2.and.ktype.eq.'E') Return
 
        if(P1.eq.P2) then
         if(ktype.eq.'E'.and.mod(kpol,2).ne.0) Return
@@ -101,12 +100,15 @@
        end if
 
        if(S1.eq.0) then  !  L = 2J
-        k=kpol+kpol
+        k=kpol+kpol; 
         if(ITRA (L1,L2,k).eq.0) Return
        else
         k=kpol+kpol+1
-        if(ITRI (L1,L2,k).eq.0) Return
-       end if
+        if(ktype.eq.'E'.and.ITRI (L1,L2,k).eq.0) Return
+        m=kpol+kpol-1
+        if(ktype.eq.'M'.and. &
+         ITRI (L1,L2,k)+ITRI (L1,L2,m).eq.0) Return
+      end if
 
       Iort_dipol = 0
 

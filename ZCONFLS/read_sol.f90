@@ -1,8 +1,7 @@
 !======================================================================
       Subroutine Read_sol(ctype,nu,nc,C,Label,E,jot)
 !======================================================================
-!
-!     read one next solution from c-,l-,j- or b-files 
+!     read one solution from c-,l-,j- or b-files 
 !
 !     nu    -  file unit
 !     ctype -  type of file (c,l,j,b)
@@ -15,17 +14,15 @@
 !     the first line in files 'l,j,b' is supposed to have already 
 !     been read !
 !----------------------------------------------------------------------
-
-
       Implicit none
 
-      Character(1), Intent(in) :: ctype
-      Integer(4), Intent(in) :: nu,nc 
-      Integer(4), Intent(inout) :: jot 
-      Character(64), Intent(out) :: Label
-      Real(8), Intent(out) :: E
-      Real(8),Dimension(nc),Intent(out) :: C
-      Integer(4) i
+      Character(1), intent(in) :: ctype
+      Integer, intent(in) :: nu,nc 
+      Integer, intent(inout) :: jot 
+      Character(64), intent(out) :: Label
+      Real(8), intent(out) :: E
+      Real(8), intent(out) :: C(nc)
+      Integer i
  
       Character(80) :: AS
 

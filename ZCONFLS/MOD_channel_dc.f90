@@ -1,10 +1,10 @@
 !===========================================================================
-      MODULE channel_dc
+      Module channel_dc
 !===========================================================================
 !     define scattering channels for one partial wave
+!     for the double-continuum case
 !---------------------------------------------------------------------------
-    
-      IMPLICIT NONE
+      Implicit none
 
       Integer :: lpar =  0 !  total L for given patial wave
       Integer :: ispar=  0 !  (2*S+1) for given patial wave
@@ -15,9 +15,9 @@
       Integer :: mch  =  0 !  max. number of channels
       Integer :: imch = 64 !  initial prediction of mch
 
-      Integer, Allocatable :: iptar(:),ipconf(:),lch1(:),lch2(:)
-      Integer, Allocatable :: chsym(:),chL(:),chS(:)
-      CHARACTER(4), ALLOCATABLE :: ELC1(:),ELC2(:)
+      Integer, allocatable :: iptar(:),ipconf(:),lch1(:),lch2(:)
+      Integer, allocatable :: chsym(:),chL(:),chS(:)
+      CHARACTER(4), allocatable :: ELC1(:),ELC2(:)
  	
       !   iptar -  pointer on the target state
       !   lch   -  small l for given channel
@@ -28,17 +28,17 @@
       Integer :: nwp        !  number of orbitals in perturber
       CHARACTER(20) :: AFP,BFP !  file-name for perturber
 
-      END MODULE channel_dc
+      End Module channel_dc
 
     
 !=======================================================================    
       Subroutine Alloc_channel_dc(m)
 !=======================================================================    
-    
+!     allocate arrays in the module "channel_dc"
+!-----------------------------------------------------------------------    
       Use channel_dc
 
-      IMPLICIT NONE
-      
+      Implicit none
       Integer, intent(in) :: m
       Integer, allocatable :: ia(:)
       Character(4), allocatable :: aa(:)
@@ -65,26 +65,26 @@
       else
        mch = m
        Allocate(ia(nch))
-	      ia=iptar(1:nch); Deallocate(iptar)
-	      Allocate(iptar(mch)); iptar(1:nch)=ia
-	      ia=ipconf(1:nch); Deallocate(ipconf)
-	      Allocate(ipconf(mch)); ipconf(1:nch)=ia
-	      ia=lch1(1:nch); Deallocate(lch1)
-	      Allocate(lch1(mch)); lch1(1:nch)=ia
-	      ia=lch2(1:nch); Deallocate(lch2)
-	      Allocate(lch2(mch)); lch2(1:nch)=ia
-	      ia=chsym(1:nch); Deallocate(chsym)
-	      Allocate(chsym(mch)); chsym(1:nch)=ia
-	      ia=chL(1:nch); Deallocate(chL)
-	      Allocate(chL(mch)); chL(1:nch)=ia
-	      ia=chS(1:nch); Deallocate(chS)
-	      Allocate(chS(mch)); chS(1:nch)=ia
+       ia=iptar(1:nch); Deallocate(iptar)
+       Allocate(iptar(mch)); iptar(1:nch)=ia
+       ia=ipconf(1:nch); Deallocate(ipconf)
+       Allocate(ipconf(mch)); ipconf(1:nch)=ia
+       ia=lch1(1:nch); Deallocate(lch1)
+       Allocate(lch1(mch)); lch1(1:nch)=ia
+       ia=lch2(1:nch); Deallocate(lch2)
+       Allocate(lch2(mch)); lch2(1:nch)=ia
+       ia=chsym(1:nch); Deallocate(chsym)
+       Allocate(chsym(mch)); chsym(1:nch)=ia
+       ia=chL(1:nch); Deallocate(chL)
+       Allocate(chL(mch)); chL(1:nch)=ia
+       ia=chS(1:nch); Deallocate(chS)
+       Allocate(chS(mch)); chS(1:nch)=ia
        Deallocate(ia)
        Allocate(aa(nch))
-	      aa=ELC1(1:nch); Deallocate(ELC1)
-	      Allocate(ELC1(mch)); ELC1(1:nch)=aa
-	      aa=ELC2(1:nch); Deallocate(ELC2)
-	      Allocate(ELC2(mch)); ELC2(1:nch)=aa
+       aa=ELC1(1:nch); Deallocate(ELC1)
+       Allocate(ELC1(mch)); ELC1(1:nch)=aa
+       aa=ELC2(1:nch); Deallocate(ELC2)
+       Allocate(ELC2(mch)); ELC2(1:nch)=aa
        Deallocate(aa)
       end if   
 
@@ -96,12 +96,10 @@
 !======================================================================
 !     read from file 'nut' information for channel klsp 
 !----------------------------------------------------------------------
-
-      USE channel_dc
+      Use channel_dc
       
       Implicit none
-      
-      Integer, Intent(in) :: nut,klsp
+      Integer, intent(in) :: nut,klsp
       Character(20) :: AF
       Character(80) :: line
       Integer :: i,j,n,k,m, nlsp

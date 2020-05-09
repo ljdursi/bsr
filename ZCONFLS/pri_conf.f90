@@ -3,11 +3,10 @@
 !======================================================================
 !     prints 'ic' configuration from module 'conf_LS'
 !----------------------------------------------------------------------
+      Use conf_LS
 
-      USE conf_LS
-
-      INTEGER, INTENT(in) :: nu
-      Real(8), INTENT(in) :: w
+      Integer, intent(in) :: nu
+      Real(8), intent(in) :: w
 
       if(ic.lt.0) Stop ' Pri_ic: ic < 0 '
       if(ic.gt.ncfg) Stop ' Pri_ic: ic > ncfg '
@@ -28,12 +27,11 @@
 !======================================================================
       Subroutine Prj_conf_LS (nu,w)
 !======================================================================
-!     prints 'ic' configuration from module 'conf_LS'
+!     prints configuration from module 'conf_LS'
 !----------------------------------------------------------------------
+      Use conf_LS
 
-      USE conf_LS
-
-      INTEGER, INTENT(in) :: nu
+      Integer, intent(in) :: nu
       Real(8), INTENT(in) :: w
 
       Call Incode_c

@@ -1,39 +1,39 @@
 !=======================================================================
-    SUBROUTINE bav(ns,ks,b,v,y,type,side)
+      Subroutine bav(ns,ks,b,v,y,type,side)
 !=======================================================================
 !
-!   Computes  y = B * v    or   y = v * B     (side =  'r' or 'l')
+!     Computes  y = B * v    or   y = v * B     (side =  'r' or 'l')
 !
-!   where b is a symmetric or non-symmetric banded matrix
-!   (type = 's' or 'n')
+!     where b is a symmetric or non-symmetric banded matrix
+!     (type = 's' or 'n')
 !
-!   and  v, y  are vectors
+!     and  v, y  are vectors
 !
 !-----------------------------------------------------------------------
 !
-!   on entry
-!   --------
+!     on entry
+!     --------
 !       ks      the number of diagonals
 !       ns      the order of the matrix
-!       b       the  banded matrix in column (upper) storage mode
+!       B       the  banded matrix in column (upper) storage mode
 !       v       vector
 !
-!   on exit
-!   -------
-!       y       y = b*v
+!     on exit
+!     -------
+!       y       y = B*v
 !
 !-----------------------------------------------------------------------
 
-      IMPLICIT NONE
-      INTEGER, INTENT(IN) :: ns, ks
-      REAL(KIND=8), DIMENSION(ns), INTENT(IN) :: v
-      REAL(KIND=8), DIMENSION(ns), INTENT(out) :: y
-      REAL(KIND=8), DIMENSION(ns,*), INTENT(IN) :: b
-      CHARACTER(LEN=1) :: type, side
+      Implicit none
+      Integer, intent(in) :: ns, ks
+      REAL(8), intent(in) :: v(ns)
+      REAL(8), intent(in) :: b(ns,*)
+      REAL(8), intent(out) :: y(ns)
+      Character :: type, side
 
       ! .. Local variables
 
-      INTEGER :: i, j, ip, imin, imax
+      Integer :: i, j, ip, imin, imax
 
 
       if(type.eq.'s') then
@@ -76,4 +76,4 @@
 
       end if
 
-      END SUBROUTINE bav
+      End Subroutine bav

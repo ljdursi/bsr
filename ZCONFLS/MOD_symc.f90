@@ -1,8 +1,8 @@
 !======================================================================
-      MODULE symc_list_LS
+      Module symc_list_LS
 !======================================================================
-!
-!     Containes the configuration symmetries
+!     Containes the configuration symmetries, defined as description
+!     of configurations without principal quantum numbers
 !
 !     ROUTINES:   alloc_symc_LS (m)
 !                 Iadd_symc_LS  (LT,ST,no,iq,ln)
@@ -12,7 +12,6 @@
 !                 def_maxl      (l)
 !                 no_conf_LS    (ic)
 !----------------------------------------------------------------------
-
       Implicit none
 
       Integer :: nsymc = 0       ! number of symmmetries
@@ -22,32 +21,32 @@
       Integer :: ksymc = 0       ! max.dimension of all symc.s 
       Integer :: lsymc = 0       ! last element 
       
-      Integer, Allocatable :: LT_conf(:), ST_conf(:)   
-      Integer, Allocatable :: no_conf(:)   
-      Integer, Allocatable :: ip_conf(:)   
-      Integer, Allocatable :: iq_conf(:)   
-      Integer, Allocatable :: ln_conf(:)   
-
+      Integer, allocatable :: LT_conf(:), ST_conf(:)   
+      Integer, allocatable :: no_conf(:)   
+      Integer, allocatable :: ip_conf(:)   
+      Integer, allocatable :: iq_conf(:)   
+      Integer, allocatable :: ln_conf(:)   
 
 ! ... IC_term1(ic), IC_term2(ic) - gives for given configuration 'ic' 
 ! ... the range of corr. terms in the ordered list of terms
 
-      Integer, Allocatable :: IC_term1(:), IC_term2(:)
+      Integer, allocatable :: IC_term1(:), IC_term2(:)
 
 ! ... IC_need(:) - define the need of calc. for two given config.s
 ! ... JC_need(:) - define the need of calc. for the given config.
 
-      Integer, Allocatable :: IC_need(:), JC_need(:)
+      Integer, allocatable :: IC_need(:), JC_need(:)
 
       Integer :: m_symc ! memory requirements
 
-      End MODULE symc_list_LS
+      End Module symc_list_LS
 
 
 !======================================================================
       Subroutine alloc_symc_LS(m)
 !======================================================================
-
+!     allocate arrays in the module "symc_list_LS"
+!----------------------------------------------------------------------
       Use symc_list_LS
 
       Implicit none
@@ -73,20 +72,20 @@
        msymc = m; jsymc = lsymc/nsymc + 1; ksymc = jsymc*msymc
        if(ksymc.lt.lsymc) ksymc=lsymc
        Allocate(ia(nsymc))
-	      ia = LT_conf(1:nsymc); Deallocate(LT_conf)
-	      Allocate(LT_conf(msymc)); LT_conf(1:nsymc)=ia
-	      ia = ST_conf(1:nsymc); Deallocate(ST_conf)
-	      Allocate(ST_conf(msymc)); ST_conf(1:nsymc)=ia
-	      ia = no_conf(1:nsymc); Deallocate(no_conf)
-	      Allocate(no_conf(msymc)); no_conf(1:nsymc)=ia
-	      ia = ip_conf(1:nsymc); Deallocate(ip_conf)
-	      Allocate(ip_conf(msymc)); ip_conf(1:nsymc)=ia
+       ia = LT_conf(1:nsymc); Deallocate(LT_conf)
+       Allocate(LT_conf(msymc)); LT_conf(1:nsymc)=ia
+       ia = ST_conf(1:nsymc); Deallocate(ST_conf)
+       Allocate(ST_conf(msymc)); ST_conf(1:nsymc)=ia
+       ia = no_conf(1:nsymc); Deallocate(no_conf)
+       Allocate(no_conf(msymc)); no_conf(1:nsymc)=ia
+       ia = ip_conf(1:nsymc); Deallocate(ip_conf)
+       Allocate(ip_conf(msymc)); ip_conf(1:nsymc)=ia
        Deallocate(ia)
        Allocate(ia(lsymc))
-	      ia = iq_conf(1:lsymc); Deallocate(iq_conf)
-	      Allocate(iq_conf(ksymc)); iq_conf(1:lsymc)=ia
-	      ia = ln_conf(1:lsymc); Deallocate(ln_conf)
-	      Allocate(ln_conf(ksymc)); ln_conf(1:lsymc)=ia
+       ia = iq_conf(1:lsymc); Deallocate(iq_conf)
+       Allocate(iq_conf(ksymc)); iq_conf(1:lsymc)=ia
+       ia = ln_conf(1:lsymc); Deallocate(ln_conf)
+       Allocate(ln_conf(ksymc)); ln_conf(1:lsymc)=ia
        Deallocate(ia)
       end if
 
@@ -100,7 +99,6 @@
 !======================================================================
 !     add new overlap conf.symmetry to symc_list
 !----------------------------------------------------------------------
-
       Use symc_list_LS
 
       Implicit none 
@@ -149,7 +147,6 @@
 !======================================================================
 !     extract configuration 'ic'                   
 !----------------------------------------------------------------------
-
       Use symc_list_LS
 
       Implicit none 
@@ -175,7 +172,6 @@
 !======================================================================
       Subroutine read_symc_LS(nu)
 !======================================================================
-
       Use symc_list_LS 
 
       Implicit none
@@ -200,7 +196,6 @@
 !======================================================================
       Subroutine write_symc_LS (nu)
 !======================================================================
-
       Use symc_list_LS 
 
       Implicit none
@@ -218,10 +213,10 @@
 
       End Subroutine write_symc_LS
 
+
 !======================================================================
       Subroutine Def_maxl(l)
 !======================================================================
-
       Use symc_list_LS 
 
       Implicit none
@@ -237,7 +232,6 @@
 !======================================================================
 !     number of shells in state 'iconf'                   
 !----------------------------------------------------------------------
-
       Use symc_list_LS
 
       Implicit none 

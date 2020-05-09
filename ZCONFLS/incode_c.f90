@@ -3,10 +3,9 @@
 !======================================================================
 !     incodes the configuration from ZOI format to c-file format
 !----------------------------------------------------------------------
+      Use conf_LS
 
-      USE conf_LS
-
-      IMPLICIT NONE
+      Implicit none
       
       Character(4), External :: ELF4
       Character(1), External :: AL
@@ -297,7 +296,7 @@
 !======================================================================
 !      decode the config. from c-file format to ZOI format
 !----------------------------------------------------------------------
-       USE conf_LS
+       Use conf_LS
 
        no=0
        ii = LEN_TRIM(CONFIG)

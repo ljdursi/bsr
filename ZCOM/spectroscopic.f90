@@ -70,7 +70,7 @@
 !--------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: n,l,k
-      Integer :: i,k1,k2,kk
+      Integer :: i,k1,k2
       Character(4) :: EL
       Character(1), external :: AL
 
@@ -87,8 +87,8 @@
        elseif(k.le.61*61) then
         k1=k/61; k2=mod(k,61); 
         if(k2.eq.0) then; k1=k1-1; k2=61; end if
-	       EL(i:i)=ASET(k2:k2); i=i-1
-	       EL(i:i)=ASET(k1:k1); i=i-1
+        EL(i:i)=ASET(k2:k2); i=i-1
+        EL(i:i)=ASET(k1:k1); i=i-1
        else
         write(*,*) ' ELF4: set index is out of limits:',k
         Stop
@@ -129,14 +129,22 @@
       Character(1), external :: AL
 
       Character(61) :: ASET = &
-  	   '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+       '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
       if(k.eq.0) then
-       ELF3(1:1) = ' '      
-       ELF3(2:2)=CHAR(n + ICHAR('1') - 1)
+       if(n.lt.100) then
+        write(ELF3(1:2),'(i2)') n      
+       else
+        ELF3(1:1) = ' '
+        ELF3(2:2)=CHAR(n)
+       end if
        ELF3(3:3)=AL(l,1)
       else
-       ELF3(1:1)=CHAR(n + ICHAR('1') - 1)
+       if(n.lt.10) then
+        write(ELF3(1:1),'(i1)') n      
+       else
+        ELF3(1:1)=CHAR(n)
+       end if
        ELF3(2:2)=AL(l,1)
        ELF3(3:3)=ASET(k:k)
       end if 
@@ -226,7 +234,7 @@
       Integer, external :: LA
 
       Character(61) :: ASET = &
-	     '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+       '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
       n=0; l=-1; k=0; i=1
       j=1
@@ -241,15 +249,13 @@
       if(j.eq.1) then            ! search n
 
        if(n.eq.0.and.ic.le.9) then
-        n=ic
+        n=ic; j=1
        elseif(n.eq.0.and.ic.gt.9) then
-        n=ic
-        j=2
-       elseif(ic.gt.9) then
-        l=LA(EL(i:i))
-        j=3
+        n=ICHAR(EL(i:i)); j=2
+       elseif(n.gt.0.and.ic.le.9) then
+        n=n*10+ic; j=2
        else
-        n=n*10+ic
+        l=LA(EL(i:i)); j=3
        end if
 
       elseif(j.eq.2) then        ! search l
@@ -263,8 +269,9 @@
 
       i=i+1
       if(i.le.3.and.j.le.3) go to 1
+
       if(n.ge.100.or.l.lt.0.or.k.ge.62) &
-       Stop 'EL4_NLK is fail to decode '
+       write(*,*) 'EL3_NLK is fail to decode ',EL
 
       End Subroutine EL3_NLK
 

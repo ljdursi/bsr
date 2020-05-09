@@ -33,24 +33,26 @@ S  =	spline_param.f90         spline_atomic.f90        spline_grid.f90          
 	vkc.f90                  vky.f90                  vk_moments.f90           \
 	wk.f90                   wky.f90                  wk_moments.f90           \
 	ykf.f90                  yval.f90                 zeta_y.f90               \
-	zinty.f90                memory_splines.f90
+	zinty.f90                memory_splines.f90       
  
 O = $(S:.f90=.o)
  
 $(N).a : $(O)
 	ar rv $(N).a $(O)
-	cp $(N).a $(LIBDIR)
-#	rm *.o *.a
+	mv $(N).a $(LIBDIR)
+	rm *.o 
  
 clean:
-	rm -f *.o *.mod *~
+	rm -f *.o  *~
  
 .SUFFIXES:
 .SUFFIXES: .f90 .mod .o .f
  
 .f90.o:
 	$(FC) $(compL) $<
- 
+
+#	$(FC) $(compL) -g -fcheck=all -Wall -fbacktrace    -fcheck=bounds $<
+
 .f.o:
 	$(FC) $(compL) $<
  

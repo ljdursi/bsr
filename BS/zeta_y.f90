@@ -9,7 +9,6 @@
 !           ZCB - 3j-symbol (to determine angular part of the intershell
 !                            interaction) 
 !----------------------------------------------------------------------
-
       USE spline_orbitals, p => pbs, L => lbs
       USE spline_atomic, nclosd => kclosd
 
@@ -75,5 +74,5 @@
 
       ZETA_y = ZETA
 
-      END FUNCTION ZETA_y
+      End Function ZETA_y
 

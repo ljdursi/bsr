@@ -1,9 +1,10 @@
 !===========================================================================
-      MODULE channels_ion
+      Module channels_ion
 !===========================================================================
-!     define scattering channels 
+!     define scattering channels;
+!     it is just a copy of the module "channels" in case we need to describe
+!     two scattering systems simultaniously 
 !---------------------------------------------------------------------------
-    
       Implicit none
 
       Integer :: nlsp =  0                !  number of partial waves               
@@ -31,28 +32,26 @@
       Integer, allocatable :: ncp(:)  !  number of configurations in perturber	
       Integer, allocatable :: nwp(:)  !  number of orbitals in perturber
 
-      END MODULE channels_ion
+      End Module channels_ion
 
 
 !=======================================================================    
-    Subroutine Allocate_channels_ion
+      Subroutine Allocate_channels_ion
 !=======================================================================    
-        
-    Use channels_ion
+!     allocate arrays in the module "channels_ion"
+!-----------------------------------------------------------------------        
+      Use channels_ion
 
-    if(nlsp.le.0) Stop ' Allocate_channels: nlsp <= 0 '
-    if(mch.le.0) Stop ' Allocate_channels: mch <= 0 '
+      if(nlsp.le.0) Stop ' Allocate_channels: nlsp <= 0 '
+      if(mch.le.0) Stop ' Allocate_channels: mch <= 0 '
 
-    Allocate(ispar(nlsp),lpar(nlsp),ipar(nlsp),jpar(nlsp),Tpar(nlsp), &
+      Allocate(ispar(nlsp),lpar(nlsp),ipar(nlsp),jpar(nlsp),Tpar(nlsp), &
              nch(nlsp),iptar(nlsp,mch),lch(nlsp,mch),ipch(nlsp,mch),  &
              ELC(nlsp,mch), ipconf(nlsp,mch), jkch(nlsp,mch),         &
              AFP(nlsp),ncp(nlsp),nwp(nlsp))
-    lch = 0
+      lch = 0
 
-    End subroutine Allocate_channels_ion
-
-
-
+      End Subroutine Allocate_channels_ion
 
 
 !======================================================================
@@ -60,12 +59,10 @@
 !======================================================================
 !     read from file 'nut' channels information 
 !----------------------------------------------------------------------
-
-      USE channels_ion
+      Use channels_ion
       
       Implicit none
-      
-      Integer, Intent(in) :: nut
+      Integer, intent(in) :: nut
       Character(20) :: AF
       Character(80) :: line
       Integer :: i,j,m,Icheck_file, Ifind_position
@@ -77,7 +74,6 @@
       if(nlsp.le.0) Stop 'R_channel: nlsp <= 0 '
 
       Call Allocate_channels_ion      
-
 
       Do i = 1,nlsp
        read(nut,'(a)') line
@@ -108,11 +104,9 @@
 !====================================================================
 !     partial wave index for give term
 !--------------------------------------------------------------------
-
-      USE channels_ion
+      Use channels_ion
 
       Implicit  none
-
       Integer, intent(in) :: IL,IS,IP
       Integer :: i
 

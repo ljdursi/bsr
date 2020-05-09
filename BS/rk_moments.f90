@@ -126,7 +126,7 @@
     ! .. local variables
 
     INTEGER(4) :: i,j, ip,jp, ii,jj, m, left,  ik
-    REAL(8) :: xbase, c
+    REAL(8) :: xbase
     REAL(8), DIMENSION(ks) :: x,w, bi, gx,gw
     REAL(8), DIMENSION(ks,ks) :: bspTmp
     REAL(8), DIMENSION(ks,ks,ks) :: INT
@@ -176,7 +176,7 @@
        END DO
       END DO
     
-    END DO	 !  over m
+     END DO !  over m
 
 ! .. second integration 
 

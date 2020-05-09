@@ -17,11 +17,11 @@ O = $(S:.f90=.o)
  
 $(N).a : $(O)
 	ar rv $(N).a $(O)
-	cp $(N).a $(LIBDIR)
-	rm *.o  *.a
+	mv $(N).a $(LIBDIR)
+	rm *.o 
  
 clean:
-	rm -f *.o *.mod *~
+	rm -f *.o *~
  
 .SUFFIXES:
 .SUFFIXES: .f90 .mod .o

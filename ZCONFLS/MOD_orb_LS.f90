@@ -1,7 +1,7 @@
 !=====================================================================
-      MODULE orb_LS
+      Module orb_LS
 !=====================================================================
-!     description of atomic orbitals
+!     description of atomic one-electron orbitals
 !
 !     ROUTINES:    Alloc_orb_LS (m)
 !                  Ifind_nlk    (n,l,k)
@@ -30,17 +30,18 @@
       Integer :: JORT = 1        
       Integer, allocatable :: IORT(:,:)
 
-      END MODULE orb_LS
+      End Module orb_LS
 
 
 !======================================================================
       Subroutine Alloc_orb_LS(m)
 !======================================================================
-
+!     allocate arrays in the module "orb_LS"
+!----------------------------------------------------------------------
       Use orb_LS
 
       Implicit none
-      Integer, Intent(in) :: m
+      Integer, intent(in) :: m
       Integer, allocatable :: ia(:), ib(:,:)
       Character(4), allocatable :: aa(:)
 
@@ -72,22 +73,22 @@
       else
        mwf = m
        Allocate(ia(nwf))
-	ia=NEF(1:nwf); Deallocate(NEF)
-	Allocate(NEF(mwf)); NEF(1:nwf)=ia
-	ia=LEF(1:nwf); Deallocate(LEF)
-	Allocate(LEF(mwf)); LEF(1:nwf)=ia
-	ia=KEF(1:nwf); Deallocate(KEF)
-	Allocate(KEF(mwf)); KEF(1:nwf)=ia
-	ia=IEF(1:nwf); Deallocate(IEF)
-	Allocate(IEF(mwf)); IEF(1:nwf)=ia
+       ia=NEF(1:nwf); Deallocate(NEF)
+       Allocate(NEF(mwf)); NEF(1:nwf)=ia
+       ia=LEF(1:nwf); Deallocate(LEF)
+       Allocate(LEF(mwf)); LEF(1:nwf)=ia
+       ia=KEF(1:nwf); Deallocate(KEF)
+       Allocate(KEF(mwf)); KEF(1:nwf)=ia
+       ia=IEF(1:nwf); Deallocate(IEF)
+       Allocate(IEF(mwf)); IEF(1:nwf)=ia
        Deallocate(ia)
        Allocate(aa(nwf))
-	aa=ELF(1:nwf); Deallocate(ELF)
-	Allocate(ELF(mwf)); ELF(1:nwf)=aa
+       aa=ELF(1:nwf); Deallocate(ELF)
+       Allocate(ELF(mwf)); ELF(1:nwf)=aa
        Deallocate(aa)
-	Allocate(ib(nwf,nwf))
-	ib=IORT(1:nwf,1:nwf); Deallocate(IORT)
-	Allocate(IORT(mwf,mwf)); IORT(1:nwf,1:nwf)=ib
+       Allocate(ib(nwf,nwf))
+       ib=IORT(1:nwf,1:nwf); Deallocate(IORT)
+       Allocate(IORT(mwf,mwf)); IORT(1:nwf,1:nwf)=ib
        Deallocate(ib)
       end if
 
@@ -103,7 +104,7 @@
 !     job = 1  -  stop if fail to find
 !     job = 2  -  add new orbital
 !------------------------------------------------------------------------
-      USE orb_LS
+      Use orb_LS
 
       Implicit none
       Integer, intent(in) :: n,l,k,job
@@ -133,7 +134,7 @@
       ELF(nwf) = ELF4(n,l,k)
       Ifind_nlk = nwf
 
-      END function Ifind_nlk
+      End Function Ifind_nlk
 
 
 !=======================================================================
@@ -141,7 +142,7 @@
 !=======================================================================
 !     provide nlk-values for orbital j
 !------------------------------------------------------------------------
-      USE orb_LS
+      Use orb_LS
       Implicit none
       Integer :: i,j,n,l,k
       n = NEF(j); l=LEF(j); k=KEF(j); i=IEF(j)
@@ -168,4 +169,5 @@
       go to 1
     2 Close(nu)
 
-      End subroutine Read_bsw_orb_LS
+      End Subroutine Read_bsw_orb_LS
+           

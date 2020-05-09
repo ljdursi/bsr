@@ -370,5 +370,5 @@
  
       FJWKB=HALF/(GH*GJWKB) 
  
-      End 
+      End Subroutine JWKB
 

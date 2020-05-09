@@ -3,10 +3,9 @@
 !======================================================================
 !     broadcast data from  module spline_orbitals
 !======================================================================
-
-      USE MPI  
-      USE spline_orbitals 
-      USE spline_param, only: ns 
+      Use MPI  
+      Use spline_orbitals 
+      Use spline_param, only: ns 
 
       Implicit none
       Integer :: myid,ierr

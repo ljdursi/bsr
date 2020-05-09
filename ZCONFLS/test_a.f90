@@ -3,8 +3,7 @@
 !======================================================================
 !     check the AFTER relations between orbitals for all configurations
 !----------------------------------------------------------------------
-
-      USE conf_LS; Use orb_LS  
+      Use conf_LS; Use orb_LS  
 
       Do ic = 1,ncfg
       

@@ -3,7 +3,6 @@
 !====================================================================
 !     check the configuration
 !--------------------------------------------------------------------
-
       Use conf_LS, iiterm => iterm
 
 ! ... check the total number of electron ...
@@ -45,7 +44,7 @@
 ! ... check that subshell term is an allowed one ...
 
       Do i=1,no
-       k = Iterm(ln(i),iq(i),0,LS(i,1),LS(i,2),LS(i,3))
+       k = Iterm_LS(ln(i),iq(i),0,LS(i,1),LS(i,2),LS(i,3))
        if(k.eq.0) then
         write(*,'(/a,i2,a)') ' Term of shell ',i,' is not recognized'
         Call Pri_conf(0,0,0.d0)

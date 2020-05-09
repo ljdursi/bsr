@@ -36,4 +36,3 @@ r_orth.f90
 r_term.f90
 test_a.f90
 test_c.f90
-zgen.f90

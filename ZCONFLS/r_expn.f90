@@ -3,12 +3,9 @@
 !====================================================================
 !     reads the expansion coefficients from c-file (unit in)
 !--------------------------------------------------------------------
-
       Implicit none
-
-      Integer, INTENT(in) :: in, ncfg
-      Real(8), INTENT(out) :: C(ncfg)
-
+      Integer, intent(in) :: in, ncfg
+      Real(8), intent(out) :: C(ncfg)
       Character  A*100
       Integer :: ic
 

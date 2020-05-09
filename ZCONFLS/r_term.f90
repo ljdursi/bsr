@@ -1,17 +1,15 @@
 !====================================================================
       Subroutine R_term(nu)
 !====================================================================
-!     reads the term list from c-file (unit nu)
+!     reads the terms list from c-file (unit nu)
 !--------------------------------------------------------------------
+      Use conf_LS
+      Use term_LS
 
-      USE conf_LS
-      USE term_LS
-
-      IMPLICIT NONE
-      
-      Integer, INTENT(in) :: nu
+      Implicit none
+      Integer, intent(in) :: nu
       Integer :: nc
-      Integer, External :: Idef_ncfg,Ifind_term
+      Integer, external :: Idef_ncfg,Ifind_term
 
       Call Alloc_term_LS(0)
       Call Alloc_term_LS(iterms)

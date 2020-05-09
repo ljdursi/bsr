@@ -5,19 +5,16 @@
 !     n1 -> begin from shell n1
 !     kset = 0 -> all set numbers --> 0
 !----------------------------------------------------------------------
-
       Use conf_LS
 
-      IMPLICIT NONE
-      
-      Integer, Intent(in) :: n1,kset
+      Implicit none
+      Integer, intent(in) :: n1,kset
       Character(*) ::  Labelc
-
-      Character(4), External :: ELF4
-      Character(1), External :: AL
+      Character(4), external :: ELF4
+      Character(1), external :: AL
       Character(4) :: EL
 
-      Integer(4) :: i,i1,i2,j,k,kk
+      Integer :: i,i1,i2,j,k,kk
 
       Labelc = ' '
 
@@ -83,19 +80,16 @@
 !     n1 -> begin from shell n1
 !     kset = 0 -> all set numbers --> 0
 !----------------------------------------------------------------------
-
       Use conf_LS
 
-      IMPLICIT NONE
-      
-      Integer, Intent(in) :: n1,kset
+      Implicit none
+      Integer, intent(in) :: n1,kset
       Character(*) ::  Labelc
-
-      Character(4), External :: ELF4
-      Character(1), External :: AL
+      Character(4), external :: ELF4
+      Character(1), external :: AL
       Character(4) :: EL
 
-      Integer(4) :: i,i1,i2,j,k,kk
+      Integer :: i,i1,i2,j,k,kk
 
       Labelc = ' '
 

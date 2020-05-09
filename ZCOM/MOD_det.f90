@@ -30,6 +30,7 @@
 !----------------------------------------------------------------------
 
 
+
 !======================================================================
       Module DET_list
 !======================================================================
@@ -202,6 +203,53 @@
 
       End Subroutine Read_det 
 
+!======================================================================
+      Subroutine Load_det (nu)
+!======================================================================
+!     Containes the overlap determinants for all symmetries
+!----------------------------------------------------------------------
+      Use det_list 
+
+      Implicit none
+      Integer :: nu
+
+      read(nu) ndet,ldet,jmdet
+      if(ndet.eq.0) Return
+
+      if(allocated(kpd)) Deallocate (KPD,IPD,NPD,JPD)
+      mdet = ndet; kdet = ldet
+      Allocate(KPD(mdet),IPD(mdet),NPD(kdet),JPD(mdet))
+
+      read(nu) kpd
+      read(nu) ipd
+      read(nu) npd
+      read(nu) jpd
+
+      End Subroutine Load_det 
+
+
+
+!======================================================================
+      Subroutine Write_det (nu)
+!======================================================================
+!     Containes the overlap determinants for all symmetries
+!----------------------------------------------------------------------
+      Use det_list 
+
+      Implicit none
+      Integer :: nu
+
+      write(nu) ndet,ldet,jmdet
+      if(ndet.eq.0) Return
+
+      write(nu) kpd(1:ndet)
+      write(nu) ipd(1:ndet)
+      write(nu) npd(1:ldet)
+      write(nu) jpd(1:ndet)
+
+      End Subroutine Write_det 
+
+
 
 !======================================================================
       Module DEF_list 
@@ -220,7 +268,7 @@
 
       Integer :: ndef = 0       ! number of determinants
       Integer :: mdef = 0       ! current dimentsion of list
-      Integer :: idef = 2**15   ! supposed max. dimentsion  
+      Integer :: idef = 2**16   ! supposed max. dimentsion  
       Integer :: jdef = 2**3    ! average number of det.s 
       Integer :: kdef = 0       ! dimension of all def.s 
       Integer :: ldef = 0       ! dimension of all def.s 
@@ -351,6 +399,52 @@
       End do
 
       End Subroutine Record_def 
+
+
+!======================================================================
+      Subroutine Write_def (nu)
+!======================================================================
+!     Containes the overlap determinants for all symmetries
+!----------------------------------------------------------------------
+      Use def_list 
+
+      Implicit none
+      Integer :: nu
+
+      write(nu) ndef,ldef,jmdef
+      if(ndef.eq.0) Return
+
+      write(nu) kpf(1:ndef)
+      write(nu) ipf(1:ndef)
+      write(nu) npf(1:ldef)
+      write(nu) jpf(1:ndef)
+
+      End Subroutine Write_def 
+
+
+!======================================================================
+      Subroutine Load_def (nu)
+!======================================================================
+!     Containes the overlap determinants for all symmetries
+!----------------------------------------------------------------------
+      Use def_list 
+
+      Implicit none
+      Integer :: nu
+
+      read(nu) ndef,ldef,jmdef
+      if(ndef.eq.0) Return
+
+      if(allocated(kpf)) Deallocate (KPF,IPF,NPF,JPF)
+      mdef = ndef; kdef = ldef
+      Allocate(KPF(mdef),IPF(mdef),NPF(kdef),JPF(mdef))
+
+      read(nu) kpf
+      read(nu) ipf
+      read(nu) npf
+      read(nu) jpf
+
+      End Subroutine Load_def 
 
 
 !======================================================================
@@ -519,7 +613,7 @@
 
       Integer :: ndef = 0       ! number of determinants
       Integer :: mdef = 0       ! current dimentsion of list
-      Integer :: idef = 2**15   ! supposed max. dimentsion  
+      Integer :: idef = 2**16   ! supposed max. dimentsion  
       Integer :: jdef = 2**3    ! average number of det.s 
       Integer :: kdef = 0       ! dimension of all def.s 
       Integer :: ldef = 0       ! dimension of all def.s 

@@ -9,7 +9,6 @@
 !     k=-1 --> Iterm_LS = number of terms in lq-subshell
 !
 !----------------------------------------------------------------------
-
       Implicit none
 
       Integer :: l,iq,k,IA,IL,IS,   kl,jq,i,j,n
@@ -17,14 +16,14 @@
       Integer, parameter :: nsh=10, nterms=419
       Integer :: lqnp(4,nsh)
       Data lqnp / 0, 0,   1,   0,    &    ! full 
-		                1, 3,   3,   1,    &    ! p3
+                  1, 3,   3,   1,    &    ! p3
                   2, 3,   8,   4,    &    ! d3
-			            	  2, 4,  16,  12,    &    ! d4
-				              2, 5,  16,  28,    &    ! d5
-              		  3, 3,  17,  44,    &    ! f3
-			            	  3, 4,  47,  61,    &    ! f4
-				              3, 5,  73, 108,    &    ! f5
-				              3, 6, 119, 181,    &    ! f6
+            	  2, 4,  16,  12,    &    ! d4
+                  2, 5,  16,  28,    &    ! d5
+      		  3, 3,  17,  44,    &    ! f3
+            	  3, 4,  47,  61,    &    ! f4
+                  3, 5,  73, 108,    &    ! f5
+                  3, 6, 119, 181,    &    ! f6
                   3, 7, 119, 300/         ! f7
 
       Integer :: ILS(3,nterms)
@@ -181,8 +180,8 @@
         if(l .ne.lqnp(1,i)) Cycle
         if(jq.ne.lqnp(2,i)) Cycle
         Iterm_LS=lqnp(3,i)
-      		Exit
-	      End do
+        Exit
+       End do
       end if
       if(Iterm_LS.eq.0) then
        write(*,*)'Iterm_LS: not included case of lq'
@@ -211,7 +210,7 @@
        n = lqnp(3,i)
        j = lqnp(4,i)
        Exit
-	     End do
+      End do
 
       Do i=1,n
        if(IA.eq.ILS(1,i+j).and.IL.eq.ILS(2,i+j).and. &
@@ -247,7 +246,7 @@
         n = lqnp(3,i)
         j = lqnp(4,i)
         Exit
-	      End do
+       End do
 
        if(n.eq.0.or.k.gt.n) then
         write(*,'(a,5i5)') 'lq, ALS=',l,iq,IA,IL,IS 

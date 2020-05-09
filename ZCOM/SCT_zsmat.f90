@@ -2,7 +2,7 @@
       Subroutine ZSMAT (nch,nopen,KMAT,SMAT)
 !======================================================================
 !     Convert K-matrix to S-matrix  by solving the equation:   AS = B
-!     where  A=(1-iK)  and   B=(1+iK)
+!     where  A=(1-iK)  and   B=(1+iK)     
 !----------------------------------------------------------------------
       Implicit none
       Integer, intent(in) :: nch,nopen

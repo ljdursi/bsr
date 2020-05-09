@@ -27,14 +27,14 @@
       Integer :: ith, jth, i, irow, jcol
    
       ym(1:ns,1:ks+ks-1) = 0.d0       
-      do i = 1,nv                           ! over intervals
-       do ith = 1,ks; irow = i+ith-1        ! over left B1-splines
-        do jth = 1,ks; jcol = jth-ith+ks    ! over right B2-splines
+      Do i = 1,nv                           ! over intervals
+       Do ith = 1,ks; irow = i+ith-1        ! over left B1-splines
+        Do jth = 1,ks; jcol = jth-ith+ks    ! over right B2-splines
          ym(irow,jcol) = ym(irow,jcol) + &
               SUM(ygr(i,:)*b1(i,:,ith)*b2(i,:,jth))
-        end do
-       end do
-      end do
+        End do
+       End do
+      End do
    
       End Subroutine ZINTYN
    

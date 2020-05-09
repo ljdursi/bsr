@@ -1,9 +1,8 @@
 !======================================================================
-      Real(8) function GEN_INT(N,IA)
+      Real(8) Function GEN_INT(N,IA)
 !======================================================================
 !     estimates the gen = N * Product [ P(j)^IA(j) ]
 !----------------------------------------------------------------------
-
       Implicit none
       Integer(2) :: N
       Integer(1) :: IA(11)
@@ -27,4 +26,4 @@
 
       GEN_INT = DFLOAT(N)*dsqrt(C)
 
-      End function GEN_INT
+      End Function GEN_INT

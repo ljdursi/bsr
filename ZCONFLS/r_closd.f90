@@ -1,16 +1,14 @@
 !====================================================================
-      Subroutine R_CLOSED(nu)
+      Subroutine R_CLOSED (nu)
 !====================================================================
 !     reads the common cloused shells list from c-file (unit nu)
 !--------------------------------------------------------------------
-
-      USE conf_LS
+      Use conf_LS
       
-      IMPLICIT NONE
-      
-      Integer, Intent(in) :: nu
+      Implicit none
+      Integer, intent(in) :: nu
       Character(4) :: EL
-      Integer, External :: Ifind_nlk
+      Integer, external :: Ifind_nlk
       Integer :: i,j, n,l,k
 
       rewind(nu)
@@ -27,6 +25,5 @@
        j=Ifind_nlk(n,l,k,2)
        i=i+4
       End do
- 
 
       End Subroutine R_CLOSED

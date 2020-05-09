@@ -1,11 +1,9 @@
 !======================================================================
-      MODULE target_dc
+      Module target_dc
 !======================================================================
-!     contains description of target
+!     contains description of target for double continuum case
 !----------------------------------------------------------------------
-
-      IMPLICIT NONE
-      SAVE
+      Implicit none
 
       Integer :: ntarg	    !  number of target states
       Integer :: ntar1
@@ -19,35 +17,34 @@
 ! ... ltarg (i) - total L 
 ! ... iptarg(i) - parity (+-1)
 
-      Integer, Allocatable :: istarg(:), ltarg(:), iptarg(:)
+      Integer, allocatable :: istarg(:), ltarg(:), iptarg(:)
                                              
 ! ... etarg(i)  - target energy in au
 
-      REAL(8), ALLOCATABLE, DIMENSION(:) :: etarg
+      Real(8), allocatable :: etarg(:)
 
 ! ... nctarg(i)  - number of target configurations
 ! ... nwtarg(i)  - number of new orbitals
 ! ... ictarg(i)  - pointer to target i in conf.list
 
-      Integer, ALLOCATABLE, DIMENSION(:) :: nctarg, nwtarg, ictarg
+      Integer, allocatable :: nctarg(:), nwtarg(:), ictarg(:)
 
 ! ... AFT    - file-names for target states
 
-      CHARACTER(20), ALLOCATABLE, DIMENSION(:) :: AFT, BFT
+      Character(20), allocatable :: AFT(:), BFT(:)
 
-      END MODULE target_dc
+      End Module target_dc
 
 
 !======================================================================
-      SUBROUTINE alloc_target_dc(m)
+      Subroutine alloc_target_dc(m)
 !======================================================================
 !     allocate (deallocate) space in module "target" 
 !----------------------------------------------------------------------
-
       Use target_dc
 
-      IMPLICIT NONE
-      Integer, Intent(in) :: m      
+      Implicit none
+      Integer, intent(in) :: m      
 
       if(m.le.0) then
        if(allocated(istarg)) Deallocate(istarg,ltarg,iptarg, &
@@ -65,7 +62,7 @@
       nct = 0
       nwt = 0
 
-      END SUBROUTINE alloc_target_dc
+      End Subroutine alloc_target_dc
 
 
 !======================================================================
@@ -73,12 +70,10 @@
 !======================================================================
 !     read from file 'nut' target information 
 !----------------------------------------------------------------------
-
-      USE target_dc 
+      Use target_dc 
       
       Implicit none
-      
-      Integer, Intent(in) :: nut
+      Integer, intent(in) :: nut
       Character(20) :: AF
       Integer :: i
  

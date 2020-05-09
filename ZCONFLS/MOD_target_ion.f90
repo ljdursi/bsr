@@ -1,18 +1,18 @@
 !======================================================================
-      MODULE target_ion
+      Module target_ion
 !======================================================================
-!     contains description of target
+!     contains description of target states;
+!     it is just a copy of module "target" in case when we have two
+!     scattering systems to be described
 !----------------------------------------------------------------------
-
-      IMPLICIT NONE
-      SAVE
+      Implicit none
 
       Integer :: ntarg	 !  number of target states
       Integer :: nphys	 !  number of physical states
-      Integer :: nelc	  !  number of atomic electrons
-      Integer :: nz     !  atomic number
-      Integer :: nct	   !  total number of target config.s 
-      Integer :: nwt    !  total number of taget orbitals
+      Integer :: nelc    !  number of atomic electrons
+      Integer :: nz      !  atomic number
+      Integer :: nct	 !  total number of target config.s 
+      Integer :: nwt     !  total number of taget orbitals
 
       Integer, allocatable :: istarg(:) !  (2*S+1) for target i 
       Integer, allocatable :: ltarg(:)  !  total L 
@@ -29,19 +29,18 @@
 
       CHARACTER(2) :: COUPLING = 'LS' ! LS, JK or JJ coupling mode
 
-      END MODULE target_ion
+      End Module target_ion
 
 
 !======================================================================
-      SUBROUTINE allocate_target_ion(m)
+      Subroutine allocate_target_ion(m)
 !======================================================================
 !     allocate (deallocate) space in module "target" 
 !----------------------------------------------------------------------
-
       Use target_ion
 
-      IMPLICIT NONE
-      Integer, Intent(in) :: m      
+      Implicit none
+      Integer, intent(in) :: m      
 
       if(m.le.0) then
        if(allocated(istarg)) Deallocate(istarg,ltarg,iptarg,jtarg, &
@@ -59,7 +58,7 @@
       nct = 0
       nwt = 0
 
-      END SUBROUTINE allocate_target_ion
+      End Subroutine allocate_target_ion
 
 
 !======================================================================
@@ -67,12 +66,10 @@
 !======================================================================
 !     read from file 'nut' target information 
 !----------------------------------------------------------------------
-
-      USE target_ion 
+      Use target_ion 
       
       Implicit none
-      
-      Integer, Intent(in) :: nut
+      Integer, intent(in) :: nut
       Character(20) :: AF
       Integer :: i
  

@@ -1,55 +1,55 @@
 !=====================================================================
-      MODULE term_LS
+      Module term_LS
 !=====================================================================
 !     description of involved terms 
 !     ROUTINES:  alloc_term_LS
 !                ifind_term()
 !---------------------------------------------------------------------
-
       Implicit none
 
       Integer :: nterms =  0      ! current number of terms
       Integer :: mterms =  0      ! max. number of terms
       Integer :: iterms = 10      ! initial suggestion for mterm
 
-      Integer, Allocatable :: ILterm(:)   ! total L
-      Integer, Allocatable :: ISterm(:)   ! total S
+      Integer, allocatable :: ILterm(:)   ! total L
+      Integer, allocatable :: ISterm(:)   ! total S
 
       Integer :: ncfgt = 0
-      Integer, Allocatable :: LSP(:)      ! term pointer 
+      Integer, allocatable :: LSP(:)      ! term pointer 
 
 ! ... first copy:
 
       Integer :: nterm1 =  0      
-      Integer, Allocatable :: ILterm1(:)  
-      Integer, Allocatable :: ISterm1(:)  
+      Integer, allocatable :: ILterm1(:)  
+      Integer, allocatable :: ISterm1(:)  
       Integer :: ncfgt1 = 0
-      Integer, Allocatable :: LSP1(:)   
+      Integer, allocatable :: LSP1(:)   
 
 ! ... second copy:
 
       Integer :: nterm2 =  0      
-      Integer, Allocatable :: ILterm2(:)  
-      Integer, Allocatable :: ISterm2(:)  
+      Integer, allocatable :: ILterm2(:)  
+      Integer, allocatable :: ISterm2(:)  
       Integer :: ncfgt2 = 0
-      Integer, Allocatable :: LSP2(:)   
+      Integer, allocatable :: LSP2(:)   
 
 ! ... DJ-factors
 
-      Real(8), Allocatable :: DJ(:,:), DJM(:,:)
+      Real(8), allocatable :: DJ(:,:), DJM(:,:)
 
-      END MODULE term_LS
+      End Module term_LS
 
 
 !======================================================================
       Subroutine alloc_term_LS(m)
 !======================================================================
-
+!     allocate arrays in module term_LS
+!----------------------------------------------------------------------
       Use term_LS
 
       Implicit none
       Integer :: m
-	     Integer, allocatable :: ia(:)
+      Integer, allocatable :: ia(:)
 
       if(m.le.0) then
        if(allocated(ILterm)) Deallocate (ILterm,ISterm)
@@ -67,28 +67,28 @@
       else
        mterms=m
        Allocate(ia(nterms))
-	      ia = ILterm(1:nterms); Deallocate(ILterm)
-	      Allocate(ILterm(mterms)); ILterm(1:nterms)=ia
-	      ia = ISterm(1:nterms); Deallocate(ISterm)
-	      Allocate(ISterm(mterms)); ISterm(1:nterms)=ia
+       ia = ILterm(1:nterms); Deallocate(ILterm)
+       Allocate(ILterm(mterms)); ILterm(1:nterms)=ia
+       ia = ISterm(1:nterms); Deallocate(ISterm)
+       Allocate(ISterm(mterms)); ISterm(1:nterms)=ia
        Deallocate(ia)
       end if
 
       End Subroutine alloc_term_LS
 
+
 !=======================================================================
       Integer FUNCTION Ifind_term(L,S,job)
 !=======================================================================
-!     find term LS in the list, = 0, if not
+!     find term LS in the list, = 0, if no term
 !     job = 0  -  no further actions
 !     job = 1  -  stop if fail to find
-!     job = 2  -  add new orbital
+!     job = 2  -  add new term
 !------------------------------------------------------------------------
-      
-      USE term_LS
+      Use term_LS
 
       Implicit none
-      Integer, INTENT(in) :: L,S,job
+      Integer, intent(in) :: L,S,job
       Integer :: i
 
       Ifind_term=0
@@ -113,13 +113,14 @@
       ISterm(nterms) = S
       Ifind_term = nterms
 
-      END FUNCTION Ifind_term
+      End Function Ifind_term
 
 
 !=======================================================================
       Subroutine Shift_term1
 !=======================================================================
-
+!     save term information in the first set
+!-----------------------------------------------------------------------
       Use term_LS
 
       if(nterms.eq.0) Return
@@ -137,10 +138,12 @@
 
       End Subroutine Shift_term1
 
+
 !=======================================================================
       Subroutine Shift_term2
 !=======================================================================
-
+!     save term information in the second set
+!-----------------------------------------------------------------------
       Use term_LS
 
       if(nterms.eq.0) Return
@@ -162,7 +165,8 @@
 !=======================================================================
       Subroutine Alloc_LSP(m)
 !=======================================================================
-
+!     allocate term pointers for the given set of configurations
+!-----------------------------------------------------------------------
       Use term_LS
 
       Implicit none

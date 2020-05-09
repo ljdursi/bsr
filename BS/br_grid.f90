@@ -1,14 +1,12 @@
 !======================================================================  
       Subroutine br_grid 
 !======================================================================
-
-      USE MPI 
-      USE spline_atomic 
-      USE spline_param 
-      USE spline_grid 
+      Use MPI 
+      Use spline_atomic 
+      Use spline_param 
+      Use spline_grid 
 
       Implicit none
-      
       Integer :: myid,ierr
 
       Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
@@ -31,5 +29,3 @@
       Call MPI_BCAST(t,ns+ks,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
 
       End Subroutine br_grid
-
-

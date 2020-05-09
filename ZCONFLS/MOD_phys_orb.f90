@@ -1,9 +1,8 @@
 !=================================================================
-      MODULE phys_orb_LS
+      Module phys_orb_LS
 !=================================================================
 !     contains the list of physical orbitals for all target states 
 !-----------------------------------------------------------------
-
       Implicit none
    
       Integer :: nphys_orb = 0           !  number of phys.orbitals
@@ -22,13 +21,15 @@
       Integer, allocatable :: np_sub(:)  !  substitution pointer 
       Real(8), allocatable :: SP_orb(:)  !  population
 
-      END MODULE phys_orb_LS
+      End Module phys_orb_LS
+
 
 !================================================================
       Subroutine read_sub_orb_LS(nu,ntarg)
 !================================================================
-
-      USE phys_orb_LS
+!     read orbitals information from unit 'nu'
+!----------------------------------------------------------------
+      Use phys_orb_LS
 
       Implicit none
       Integer, intent(in) :: nu, ntarg
@@ -43,7 +44,7 @@
 
       Do i=1,ntarg
        read(nu,*)
-	      Do
+       Do
         read(nu,'(a)') A
         if(A(1:1).eq.'*') Exit
         nphys_orb=nphys_orb+1
@@ -59,7 +60,7 @@
       i=Ifind_position(nu,'target'); j=0
       Do i=1,ntarg
        read(nu,*)
-	      Do
+       Do
         read(nu,'(a)') A
         if(A(1:1).eq.'*') Exit
         j=j+1
@@ -103,11 +104,9 @@
 !================================================================
       Subroutine read_sub_pert_LS(nu,ipert)
 !================================================================
-
       Use phys_orb_LS
 
       Implicit none
-
       Integer, Intent(in) :: nu, ipert
       Character(80) :: A
       Integer :: i,j,n,l,k,kap,jot,jpert
@@ -125,7 +124,7 @@
        if(jpert.ne.ipert) Cycle
        Do
         read(nu,'(a)') A
-	       if(A(1:1).eq.'*') Exit
+        if(A(1:1).eq.'*') Exit
         npert_sub = npert_sub + 1
        End Do
        Exit

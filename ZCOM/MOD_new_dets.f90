@@ -25,7 +25,7 @@
 
 
 !======================================================================
-      Subroutine Alloc_ndets(m)
+      Subroutine Allocate_ndets(m)
 !======================================================================
 !     allocate, deallocate or Reallocate arrays in module new_dets
 !----------------------------------------------------------------------
@@ -61,7 +61,7 @@
        end if
       end if
 
-      End Subroutine Alloc_ndets
+      End Subroutine Allocate_ndets
 
 
 !======================================================================
@@ -77,7 +77,7 @@
 
       if(abs(S).lt.eps_det) Return
       
-      if(nndet+1.gt.mndet) Call Alloc_ndets(mndet+indet)
+      if(nndet+1.gt.mndet) Call Allocate_ndets(mndet+indet)
 
       nndet = nndet + 1
       IZOD(nndet) = io

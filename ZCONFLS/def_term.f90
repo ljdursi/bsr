@@ -1,15 +1,13 @@
 !====================================================================
       Subroutine Def_term(nu,ILT,IST,IPT)
 !====================================================================
-!     define the term from c-file (unit nu)
+!     define the term from c-file (unit nu) in (2j+1) format
 !--------------------------------------------------------------------
+      Use conf_LS
 
-      USE conf_LS
-
-      IMPLICIT NONE
-      
-      Integer, INTENT(in) :: nu
-      Integer, INTENT(out) :: ILT,IST,IPT
+      Implicit none
+      Integer, intent(in) :: nu
+      Integer, intent(out) :: ILT,IST,IPT
       Integer :: i
       Character(80) :: AS
 
@@ -32,18 +30,17 @@
 
       End Subroutine DEF_term
 
+
 !====================================================================
       Subroutine Def_term_BSR(nu,ILT,IST,IPT)
 !====================================================================
 !     define the term from c-file (unit nu) as L,(2J), 2S+1
 !--------------------------------------------------------------------
+      Use conf_LS
 
-      USE conf_LS
-
-      IMPLICIT NONE
-      
-      Integer, INTENT(in) :: nu
-      Integer, INTENT(out) :: ILT,IST,IPT
+      Implicit none
+      Integer, intent(in) :: nu
+      Integer, intent(out) :: ILT,IST,IPT
       Integer :: i
       Character(80) :: AS
 

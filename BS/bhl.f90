@@ -3,15 +3,15 @@
 !======================================================================
 !     <P_i| L |P_j>  with inclusion of rel.shift if rel = .true.
 !----------------------------------------------------------------------
-      USE spline_param
-      USE spline_orbitals
-      USE spline_hl
-      USE spline_atomic
+      Use spline_param
+      Use spline_orbitals
+      Use spline_hl
+      Use spline_atomic
 
-      IMPLICIT NONE
-      INTEGER, INTENT(in) :: i,j
-      REAL(KIND=8) :: BHL
-      REAL(KIND=8), EXTERNAL :: BVMV
+      Implicit none
+      Integer, intent(in) :: i,j
+      Real(8) :: BHL
+      Real(8), external :: BVMV
 
       if (iabs(LBS(i)-LBS(j)) .NE. 0) Stop ' HL:  LI <> LJ'
 

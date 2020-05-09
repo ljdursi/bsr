@@ -1,22 +1,22 @@
 !======================================================================
-      MODULE target
+      Module target
 !======================================================================
-!     contains description of target
+!     contains description of target states
 !----------------------------------------------------------------------
       Implicit none
 
       Integer :: ntarg	 !  number of target states
       Integer :: nphys	 !  number of physical states
-      Integer :: nelc	  !  number of atomic electrons
-      Integer :: nz     !  atomic number
-      Integer :: nct	   !  total number of target config.s 
-      Integer :: nwt    !  total number of taget orbitals
+      Integer :: nelc	 !  number of atomic electrons
+      Integer :: nz      !  atomic number
+      Integer :: nct	 !  total number of target config.s 
+      Integer :: nwt     !  total number of taget orbitals
 
       Integer, allocatable :: istarg(:) !  (2*S+1) for target i 
-      Integer, allocatable :: ltarg(:)  !  total L 
+      Integer, allocatable :: ltarg (:) !  total L 
       Integer, allocatable :: iptarg(:) !  parity (+-1)
-      Integer, allocatable :: jtarg(:)  !  (2*J+1) 
-      Real(8), allocatable :: etarg(:)  !  target energy in au
+      Integer, allocatable :: jtarg (:) !  (2*J+1) 
+      Real(8), allocatable :: etarg (:) !  target energy in au
 
       Integer, allocatable :: nctarg(:) !  number of target configurations
       Integer, allocatable :: nwtarg(:) !  number of new orbitals
@@ -27,7 +27,7 @@
 
       Character(2) :: COUPLING = 'LS' ! LS, JK or JJ coupling mode
 
-      END MODULE target
+      End Module target
 
 
 !======================================================================
@@ -142,37 +142,37 @@
       Open(nut,file='target')
 
       write(nut,'(a)') & 
-'title of the case:  e + SiII',                                            &
+'title of the case:  e + ... ',                                            &
 '------------------------------------------------------------------------',&
-'coupling = LS    !   non-relativistic calculations',                      &        
+'coupling = LS    !   coupling scheme',                                    &        
 'nz =  14         !   nuclear charge',                                     &        
 'nelc = 13        !   number of electrons',                                &       
 '------------------------------------------------------------------------',&
 'ntarg =  7       !   number of target states',                            &       
 '------------------------------------------------------------------------',&
-'3s2_3p.c     ',                                                           &
-'3s3p2_4P.c   ',                                                           &
-'3s3p2_2D.c   ',                                                           &
-'4s_2S.c      ',                                                           & 
-'3s3p2_2S.c   ',                                                           &
-'3d_2D.c      ',                                                           &
-'3s3p2_2P.c   ',                                                           & 
+'3s2_3p       ',                                                           &
+'3s3p2_4P     ',                                                           &
+'3s3p2_2D     ',                                                           &
+'4s_2S        ',                                                           & 
+'3s3p2_2S     ',                                                           &
+'3d_2D        ',                                                           &
+'3s3p2_2P     ',                                                           & 
 '------------------------------------------------------------------------',&
 'nlsp = 8         !   number of partial waves',                            &     
 '------------------------------------------------------------------------',&        
 '001    0    1    1   no       ',                                          & 
 '002    0    3    1   no       ',                                          &
 '003    1    1    1   no       ',                                          &
-'004    1    3    1   3p2_3P.c ',                                          &
-'005    1    1   -1   3p3_1P.c ',                                          &
-'006    1    3   -1   no       ',                                          &
-'007    2    1    1   no       ',                                          &
-'008    2    3    1   no       ',                                          &
+'004    1    3    1   3p2_3P   ',                                          &
+'005    1    1   -1   3p3_1P   ',                                          &
+'006    1    3   -1            ',                                          &
+'007    2    1    1            ',                                          &
+'008    2    3    1            ',                                          &
 '------------------------------------------------------------------------',&        
 'kpert = 2       !  number of additional perturbers (optional)',           &                        
 '------------------------------------------------------------------------',&        
-'001  3p2_1S.c',                                                           &
-'006  3p3_3P.c',                                                           &
+'001  3p2_1S  ',                                                           &
+'006  3p3_3P  ',                                                           &
 '------------------------------------------------------------------------'
 
       End Subroutine Print_target

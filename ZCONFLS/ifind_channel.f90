@@ -3,13 +3,11 @@
 !======================================================================
 !     find channel (or perturber) for given configuration 'ic'
 !----------------------------------------------------------------------
-
       Use target_dc; Use channels_dc
 
       Implicit none
-
-      Integer(4), Intent(in) :: ic,klsp
-      Integer(4) :: i,ich,kch,ip
+      Integer, intent(in) :: ic,klsp
+      Integer :: i,ich,kch,ip
 
       i=1
       ip = ipch(klsp); kch = nch(klsp)

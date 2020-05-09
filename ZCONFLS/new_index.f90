@@ -3,11 +3,9 @@
 !======================================================================
 !     assign new set index for orbital 'l'  
 !----------------------------------------------------------------------
-
       Use param_LS, only: ksmax
 
       Implicit none
-
       Integer, Intent(in) :: l,kksmax,nwf
       Integer, Intent(in) :: ln(*),kn(*)
       Integer :: i,k,m
@@ -23,4 +21,4 @@
       End do
       New_index = k
 
-      End function New_index
+      End Function New_index
