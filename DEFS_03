@@ -1,0 +1,66 @@
+FC = gfortran                         # serial compiler
+FC_mpi = mpif90                       # MPI compiler
+
+HOME     = C:\oleg                    # home directory: should be in user enviroment
+LIBDIR   = C:\oleg\T\LIBS_03          # libraries directory
+BINDIR   = C:\oleg\BIN                # your bin directory
+ 
+comp  = -c -O2 -I. -I${LIBDIR}        # flags for comilation of the program files
+compL = -c -O2  -J${LIBDIR}           # flags for compilation of librariry files
+link  = -O2 -I. -I${LIBDIR}           # linker flags
+
+ARCH     = ar                         # archive routines
+ARCHFLAGS= rv
+RANLIB   = ranlib
+
+ZCOM    = ${LIBDIR}\libzcom.a         # aliases for libraries
+ZCONFLS = ${LIBDIR}\libzconfLS.a
+ZCONFJJ = ${LIBDIR}\libzconfjj.a
+RADIAL  = ${LIBDIR}\libradial.a
+BS      = ${LIBDIR}\libBS.a
+DBS     = ${LIBDIR}\libDBS.a
+SHELLS  = ${LIBDIR}\libshells.a
+ZCONF90 = ${LIBDIR}\libzconf90.a
+BSR_MPI = $(LIBDIR)/lib_bsr_mpi.a
+
+LAPACK = ${LIBDIR}\liblapack.a ${LIBDIR}\librefblas.a     # indicate your LAPACK and BLAS libraries
+
+
+# below - variables not using in BSR or DBSR, just for my PC
+
+# CFF
+
+CFF_COM = ${LIBDIR}\libcom.a
+CFF_RAD = ${LIBDIR}\librad.a
+CFF_ANG = ${LIBDIR}\libang.a
+
+CFF_LIB = ${LIBDIR}\libang.a ${LIBDIR}\libcom.a ${LIBDIR}\librad.a ${LIBDIR}\libcom.a
+
+# GRASP
+
+GRASPDIR= ${HOME}\T\grasp2Kzoi\src
+GRASPLIB= ${GRASPDIR}\lib
+BD      = ${GRASPLIB}\bd\BD.o
+NJGRAF  = ${GRASPLIB}\njgraf\libnjgraf.a
+LIB92   = ${GRASPLIB}\lib92\lib92.a
+DVDSON  = ${GRASPLIB}\dvdrc\libdvdson.a
+GRASPLIBS = $(BD) $(LIB92) $(NJGRAF) $(DVDSON) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
