@@ -1,0 +1,65 @@
+FC = gfortran
+FC_mpi = mpif90
+
+HOME     = C:\oleg
+LIBDIR   = C:\oleg\T\LIBS_03
+BINDIR   = C:\oleg\BIN
+ 
+comp  = -c -O2 -I. -I${LIBDIR}
+compL = -c -O2  -J${LIBDIR}
+link  = -O2 -I. -I${LIBDIR}
+
+ARCH     = ar
+ARCHFLAGS= rv
+RANLIB   = ranlib
+
+ZCOM    = ${LIBDIR}\libzcom.a         
+ZCONFLS = ${LIBDIR}\libzconfLS.a
+ZCONFJJ = ${LIBDIR}\libzconfjj.a
+RADIAL  = ${LIBDIR}\libradial.a
+BS      = ${LIBDIR}\libBS.a
+DBS     = ${LIBDIR}\libDBS.a
+SHELLS  = ${LIBDIR}\libshells.a
+ZCONF90 = ${LIBDIR}\libzconf90.a
+BSR_MPI = $(LIBDIR)/lib_bsr_mpi.a
+
+LAPACK = ${LIBDIR}\liblapack.a ${LIBDIR}\librefblas.a
+
+# below - variables not using in BSR or DBSR, just for my PC
+
+# CFF
+
+CFF_COM = ${LIBDIR}\libcom.a
+CFF_RAD = ${LIBDIR}\librad.a
+CFF_ANG = ${LIBDIR}\libang.a
+
+CFF_LIB = ${LIBDIR}\libang.a ${LIBDIR}\libcom.a ${LIBDIR}\librad.a ${LIBDIR}\libcom.a
+
+# GRASP
+
+GRASPDIR= ${HOME}\T\grasp2Kzoi\src
+GRASPLIB= ${GRASPDIR}\lib
+BD      = ${GRASPLIB}\bd\BD.o
+NJGRAF  = ${GRASPLIB}\njgraf\libnjgraf.a
+LIB92   = ${GRASPLIB}\lib92\lib92.a
+DVDSON  = ${GRASPLIB}\dvdrc\libdvdson.a
+GRASPLIBS = $(BD) $(LIB92) $(NJGRAF) $(DVDSON) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
