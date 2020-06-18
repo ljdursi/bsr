@@ -1,0 +1,5 @@
+add_subdirectory(BSR_BMAT4)
+add_subdirectory(BSR_BREIT)
+add_subdirectory(BSR_CONF3)
+add_subdirectory(BSR_DMAT3)
+add_subdirectory(BSR_HD3)
