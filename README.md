@@ -1,4 +1,4 @@
-# BSR3: B-spline atomic R-matrix codes, third version
+# BSR: B-spline atomic R-matrix codes
 
 BSR is a general program to calculate atomic continuum processes using
 the B-spline R-matrix method, including electron-atom and electron-ion
@@ -33,20 +33,31 @@ transitions, photoionization and polarizabilities. The calculations
 are performed in jj-coupling scheme using the Dirac-Coulomb-Breit
 Hamiltonian.
 
-## Installation
+# Build instructions
 
-put DEF_03 (see Libraries_03) in your home directory, make corrections
-in the file regarding your compiler, then compile the libraries first,
-then all programs in raw, using the Makefiles for each program
-put the DEF_03 file in your home directory and run make for all
-libraries in raw, beginning from ZCOM
+Building BSR requires
 
-## Libraries
+- [CMake](https://cmake.org/) (at least version 3.13)
+- A working Fortran compiler (tested with `gfortran` 9.3)
+- A BLAS/LAPACK installation
+- Optionally, a MPI implementation (tested with OpenMPI). If found,
+  MPI versions of some of the codes are also built.
 
-This repository contains the libraries used in the BSR and DBSR complexes.
+When these requirements are fulfilled, building BSR is very
+easy. Create a `build/` subdirectory, and compile from there:
 
-Together with the LAPACK and BLAS libraries, they allows one to compile all codes.
+```bash
+/path/to/bsr $ mkdir build && cd build
 
-Descriprion will be given in separate files (doc or pdf).
+/path/to/bsr/build $ FC=gfortran cmake ../src/
+-- The C compiler identification is AppleClang 11.0.0.11000033
+-- The CXX compiler identification is AppleClang 11.0.0.11000033
+...
 
+/path/to/bsr/build $ make
+```
 
+(Multithreaded build with `make -jN` does not work with Fortran
+modules interdependencies).
+
+All executables can then be found under `build/bin/`.
