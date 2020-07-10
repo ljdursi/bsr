@@ -1,0 +1,666 @@
+!======================================================================
+      Module DBS_grid
+!======================================================================
+!     the B-spline knot parameters 
+!----------------------------------------------------------------------
+      Implicit none
+
+      Integer :: grid_type=0  ! type of grid
+
+      Integer :: ks = 9       ! order of B-splines
+      Integer :: ns = 0       ! number of splines
+      Integer :: ms = 0       ! number of splines in (P,Q) basis
+      Integer :: nv = 0       ! number of intervals ( = ns-ks+1 )
+
+      Integer :: ml = 0       ! number of intervals from 0 to 1 (=1/h)
+      Integer :: me = 0       ! number of intervals in the exponential region
+
+      Real(8) :: zg   = 1.d0    ! initial-point scaling factor
+      Real(8) :: hi   = 0.25d0  ! initial step in the knot sequence for z*r
+      Real(8) :: he   = 0.25d0  ! exponential step (or alfa parameter)
+      Real(8) :: hmax = 1.d0    ! maximum step, t(ns+1) - t(ns) 
+      Real(8) :: rmax =50.d0    ! input border radius for z*r
+      Real(8) :: tmax = 0.d0    ! real border radius, t(ns+1)
+
+      Real(8) :: alfa = 0.d0  ! semi-logarithmic grid parameter
+
+! ... additional bases:
+
+      Integer :: ksp, nsp     ! B-splines for p-functions
+      Integer :: ksq, nsq     ! B-splines for q-functions
+
+! ... knot sequence, t(1:ns+ks)
+
+      Real(8), allocatable :: t(:)
+
+! ... where to look for the grid:
+
+      Character(80) :: AF_grid = 'knot.dat'
+
+      End Module DBS_grid
+
+!======================================================================
+      SUBROUTINE def_grid (knot,name,z,atw)
+!======================================================================
+!     get input data for the grid and sets up the spline knots 
+!    
+!     knot -  if not empty, it defines file with grid parameters
+!     name -  name of case; if is not empty, will be created name.knot,
+!             file with grid parameters for the given case
+!     z    -  nuclear charge
+!     atw  -  atomic weight  
+!
+!     if knot is empty, program check file name.knot and then knot.dat;
+!     if both files are absent, program creats grid file for given z;
+!     if z=0, just example file created for z=1 and execution stops
+!----------------------------------------------------------------------
+      Use DBS_grid
+      Use DBS_nuclear
+      
+      Implicit none
+      Character(*) :: knot, name
+      Real(8) :: z,atw
+      Integer :: nug=0
+      Logical :: EX
+
+! ... define the file name for input grid parameters:
+
+      if(len_trim(knot).ne.0.and.INDEX(knot,'.bsw').eq.0) then
+       AF_grid = knot
+      elseif(len_trim(name).ne.0) then
+       AF_grid = trim(name)//'.knot'
+      end if
+      Inquire(file=AF_grid,exist=EX)           
+      if(EX) Call Find_free_unit(nug)
+      if(nug,gt.0) Open(nug,file=AF_grid)
+
+! ... create knot.dat as example:
+
+      if(z.eq.0.and.nug.eq.0) then
+       Call mkgrid_01
+       Call Write_knotdat
+       Stop 'check knot.dat file first'
+      end if
+
+! ... check nuclear parameters first:
+
+      Call Read_nuclear(nug,z,atw)
+
+! ... read grid parameters fron the file if any:
+
+      zg = z
+      if(nug.gt.0) then              
+       Call Read_ipar(nug,'grid_type',grid_type)      
+       Call Read_ipar(nug,'ns',ns)      
+       Call Read_ipar(nug,'ks',ks)      
+       Call Read_ipar(nug,'nv',nv)      
+       Call Read_rpar(nug,'zg',zg)      
+       Call Read_rpar(nug,'hi',hi)      
+       Call Read_rpar(nug,'he',he)      
+       Call Read_rpar(nug,'hmax',hmax)      
+       Call Read_rpar(nug,'rmax',rmax)      
+       Call Read_ipar(nug,'ksp',ksp)      
+       Call Read_ipar(nug,'ksq',ksq)      
+       Close(nug)
+      end if
+
+! ... read grid parameters from command line if any:
+
+      Call Read_iarg('grid_type',grid_type)      
+      Call Read_iarg('ns',ns)      
+      Call Read_iarg('ks',ks)      
+      Call Read_iarg('nv',nv)      
+      Call Read_rarg('zg',zg)      
+      Call Read_rarg('hi',hi)      
+      Call Read_rarg('he',he)      
+      Call Read_rarg('hmax',hmax)      
+      Call Read_rarg('rmax',rmax)                  
+      Call Read_iarg('ksp',ksp)      
+      Call Read_iarg('ksq',ksq)      
+
+      if(ksp.le.0.or.ksp.gt.ks) ksp=ks-1
+      if(ksq.le.0.or.ksq.gt.ks) ksq=ks
+
+! ... create the knot grid: 
+
+      Select case(grid_type)
+       Case(-1);     Call read_grid(nug)  
+       Case(0);      Call mkgrid_00
+       Case(1);      Call mkgrid_01
+       Case(2);      Call mkgrid_02
+       Case(3);      Call mkgrid_03
+       Case(4);      Call mkgrid_04
+       Case(5);      Call mkgrid_05
+       Case(6);      Call mkgrid_06
+       Case(7);      Call mkgrid_07
+       Case default; Stop 'Unknown grid_type'
+      End Select
+
+! ... record the grid parameters:
+
+      if(grid_type.gt.0) Call Write_knotdat
+
+      End Subroutine def_grid
+
+
+!======================================================================
+      Subroutine read_grid (nu)
+!======================================================================
+!     read t-sequence from knot.dat;
+!     it is option to work with old knot-sequences 
+!----------------------------------------------------------------------
+      Use DBS_grid                                   
+
+      Implicit none
+      Integer :: nu, i,j
+      Integer, external :: Ifind_position 
+
+      if(ns.le.0)  Stop 'Stop in read_grid:  ns = 0' 
+      if(allocated(t)) Deallocate(t); Allocate(t(ns+ks))
+
+      if(Ifind_position(nu,'grid points:').eq.0) &
+       Stop 'Stop in read_grid:  can not find grid points' 
+
+      read(nu,*)
+      read(nu,*) 
+      Do i=1,ns+ks; read(nu,*) j,t(j); End do
+
+      End Subroutine read_grid
+
+
+!======================================================================
+      Subroutine Write_knotdat
+!======================================================================
+!     create example of the knot.dat file
+!----------------------------------------------------------------------
+      Use DBS_grid
+      Use DBS_nuclear
+
+      Implicit none
+      Integer :: i, nug
+
+      Call Find_free_unit(nug)
+      Open(nug,file=AF_grid)
+      rewind(nug)
+
+      write(nug,'(a,i3,6x)') 'grid_type = ',grid_type
+      write(nug,*)
+      write(nug,'(a,i5,15x,a)') 'ks =',ks,'!  order  of splines' 
+      write(nug,'(a,i5,15x,a)') 'ns =',ns,'!  number of splines' 
+      write(nug,'(a,i5,15x,a)') 'nv =',nv,'!  number of intervals' 
+      write(nug,*)
+      write(nug,'(a,i5,15x,a)') 'ksp=',ksp
+      write(nug,'(a,i5,15x,a)') 'ksq=',ksq
+      write(nug,*)
+      write(nug,'(a,f16.8,2x,a)') 'zg =   ',zg,'!  eff. nuclear charge for point grid'
+      write(nug,'(a,f16.8,2x,a)') 'hi =   ',hi,'!  initial step for r*zg '
+      write(nug,'(a,f16.8,2x,a)') 'he =   ',he,'!  exponetial step size' 
+      write(nug,'(a,f16.8,2x,a)') 'hmax = ',hmax,'!  maximum step size for r' 
+      write(nug,'(a,f16.8,2x,a)') 'rmax = ',rmax,'!  maximum unscaled r' 
+      write(nug,'(a,f16.8,2x,a)') 'tmax = ',tmax,'!  maximum t(i), scaled r' 
+      write(nug,*)
+      write(nug,'(a,f8.2)') 'atomic_number = ',atomic_number
+      write(nug,'(a,f8.2)') 'atomic_weight = ',atomic_weight
+      write(nug,*)
+      write(nug,'(a,a)') 'nuclear =  ',nuclear
+      write(nug,*)
+      write(nug,'(a,E16.8,a)') 'c_fermi =   ',c_fermi,' !  in a.u.'
+      write(nug,'(a,E16.8,a)') 'a_fermi =   ',a_fermi,' !  in a.u.'
+      write(nug,*)
+      write(nug,'(a,E16.8,a)') 'r_uniform = ',r_uniform
+      write(nug,*)
+      write(nug,'(a,E16.8,a)') 'I_nuclear = ',I_nuclear,' !  nuclear spin'
+      write(nug,'(a,E16.8,a)') 'D_nuclear = ',D_nuclear,' !  dipole moment, in magnetons'
+      write(nug,'(a,E16.8,a)') 'Q_nuclear = ',Q_nuclear,' !  quadrupol, in barns'
+      write(nug,*)
+      write(nug,'(a)') 'grid points:'
+      write(nug,*)
+      if(allocated(t)) then
+       write(nug,'(i5,d24.16)') (i,t(i),i=1,ns+ks)
+      End if
+      write(nug,'(a)') '***'
+      write(nug,*)
+      write(nug,'(a,D25.16)') 'alfa =',alfa
+      write(nug,*)
+      write(nug,'(a,i3,2x,a)') 'ml =',ml,'number of distinct knots from 0 to 1 (=1/h)'
+      write(nug,'(a,i3,2x,a)') 'me =',me,'number of knots in the exponential region '
+      write(nug,*)
+      write(nug,'(a,f12.5)') 'max k^2 (Ry) = ', pi*(1/hmax)**2
+      write(nug,*)
+      write(nug,'(a)') 'possible grid-type:' 
+      write(nug,*)
+      write(nug,'(a)') ' 0  -  exponential '   
+      write(nug,'(a)') ' 1  -  semi-exponential, old '   
+      write(nug,'(a)') ' 2  -  semi-exponential, new '   
+      write(nug,'(a)') ' 3  -  equally-spaced, for given nv '   
+      write(nug,'(a)') ' 4  -  exponential, for given ns and rmax '   
+      write(nug,'(a)') ' 5  -  sine-like, for given ns and rmax '   
+      write(nug,'(a)') ' 6  -  exponential, for given ns and rmax '   
+      write(nug,'(a)') ' 7  -  exponential '   
+
+      Close(nug)
+
+      End Subroutine Write_knotdat
+
+
+!======================================================================
+      Subroutine mkgrid_00
+!======================================================================
+!     sets up the knots for splines in exponential grid:
+!
+!                  t(i+1) = t(i) * (1+he)
+!
+!     The first nonzero ti = t(ks+1) defined as:
+!       point nuclear   -   ti = hi/zg
+!       uniform         -   ti = r_uniform/4.d0
+!       fermi           -   ti = ts/4.d0
+!----------------------------------------------------------------------
+      Use DBS_grid
+      Use DBS_nuclear, only: nuclear,r_uniform,a_fermi
+
+      Implicit none
+      Integer :: i
+      Real(8) :: ti,ts,ht     
+
+      grid_type = 0
+
+! ... initial point:
+
+      if(nuclear.eq.'point') then
+       ti=hi/zg  
+      elseif(nuclear.eq.'Fermi') then
+       ts = 4.d0 * log(3.d0) * a_fermi
+       ti = ts/4.d0
+      else
+       ti = r_uniform/4.d0
+      End if
+      
+      ht = 1.d0 + he
+
+      ! find ns
+      ns=ks+1; ts=ti
+      Do
+       ns=ns+1; ts = ts*ht; if(ts.gt.rmax) exit 
+      End do
+      ns = ns - 1
+
+      if(allocated(t)) Deallocate(t); Allocate(t(ns+ks))
+      t = 0.d0
+      t(ks+1) = ti
+      Do i=ks+2,ns+1; t(i)=t(i-1)*ht; End do
+      t(ns+2:ns+ks) = t(ns+1)
+ 
+      tmax = t(ns+1)
+      hmax = t(ns+1)-t(ns)
+      ms=ns+ns; nv=ns-ks+1
+ 
+      End Subroutine mkgrid_00
+
+
+!======================================================================
+      Subroutine mkgrid_01
+!======================================================================
+!     sets up the knots for splines in semi-exponential grid:
+!     first exponantial grid (see mkgrid_00), then with the same step   
+!----------------------------------------------------------------------
+      Use DBS_grid
+      Use DBS_nuclear
+
+      Implicit none
+      integer :: i,n,nu
+      Real(8) :: ti,tj,ts,ht     
+
+      Call Find_free_unit(nu)
+      open(nu,file='grid',form='UNFORMATTED',status='UNKNOWN')
+      rewind(nu)
+
+! ... first part of grid with irregular small steps:
+! ... (this part depEnds on nuclear)
+
+      ns = ks
+
+      if(nuclear.eq.'uniform') then     ! uniform charge distribution
+
+       ti=0.d0; ht = r_uniform/4
+       ti = ti + ht; ns = ns + 1; write(nu) ti
+
+      elseif(nuclear.eq.'Fermi') then   ! Fermi charge distribution
+
+       ts = 4.d0 * log(3.d0) * a_fermi
+
+       ht = ts/2
+       n = INT(LOG10(ht)/LOG10(2.d0)) - 1
+       ti = 2.d0**n; ns = ns+1; write(nu) ti
+
+      else                          ! point nucleus
+
+       ns = ks; ti = 0.d0 
+       Do  
+        ti = ti + hi/zg; ns = ns + 1; write(nu) ti
+        if(ti.ge.1.0d0/zg) Exit
+       End do
+     
+      End if
+      ml = ns-ks
+
+! ... "exponential" part of grid:
+
+      Do 
+       tj = ti*(1.d0+he)
+       if(tj-ti.gt.hmax) Exit
+       ns = ns + 1; ti = tj;  write(nu) ti
+       if(ti.gt.rmax) Exit
+      End do
+      me = ns - ks - ml
+
+! ... rest of interval with step = hmax
+
+      if(ti.lt.rmax) then
+       Do 
+        ti = ti + hmax;  ns = ns + 1; write(nu) ti
+        if(ti.ge.rmax) Exit
+       End do
+      End if
+
+      if(allocated(t)) Deallocate(t); Allocate(t(ns+ks))
+      t = 0.d0
+
+      rewind(nu); Do i=ks+1,ns; read(nu) t(i); End do
+
+      if(t(ns).ge.rmax) then
+       ns = ns - 1; me = me - 1
+       t(ns+1:ns+ks) = rmax
+       t(ns) = (t(ns+1)+t(ns-1))/2
+      End if
+
+      t(ns+1:ns+ks) =  rmax;  tmax = rmax
+
+      nv = ns - ks + 1
+      ms = ns + ns
+      me=0                                       
+      Close(nu, status='DELETE')
+
+      End Subroutine mkgrid_01
+
+
+!======================================================================
+      Subroutine mkgrid_02
+!======================================================================
+!     sets up the knots for splines in semi-exponential grid:
+!     first exponantial grid (see mkgrid_00, then with the same step)   
+!----------------------------------------------------------------------
+      Use DBS_grid
+      Use DBS_nuclear
+
+      Implicit none
+      Integer :: i,ne
+      Real(8) :: ti,tj,ts,ht,hs     
+
+! ... initial point:
+
+      if(nuclear.eq.'point') then
+       hs=hi/zg  
+      elseif(nuclear.eq.'Fermi') then
+       ts = 4.d0 * log(3.d0) * a_fermi
+       hs = ts*hi
+      else
+       hs = r_uniform*hi
+      End if
+
+      ti = hs*ks; ns = ks + ks 
+        
+      ml = ns-ks
+
+! ... "exponential" part of grid:
+
+      ht = 1.d0 + he
+      Do 
+       tj = ti*ht
+       if(tj-ti.gt.hmax) Exit
+       ns = ns + 1; ti = tj
+       if(ti.gt.rmax) Exit
+      End do
+      ne = ns
+        
+! ... rest of interval with step = hmax
+
+      if(ti.lt.rmax) then
+       Do 
+        ti = ti + hmax;  ns = ns + 1
+        if(ti.ge.rmax) Exit
+       End do
+      End if
+      ns = ns - 1
+
+      if(allocated(t)) Deallocate(t); Allocate(t(ns+ks))
+      t = 0.d0
+
+      Do i=ks+1,ks+ks;       t(i) = hs*(i-ks); End do  
+      Do i=ks+ks+1,ne;       t(i) = t(i-1) * ht; End do  
+      Do i=ne+1,ns+1;        t(i) = t(i-1) + hmax; End do
+      t(ns+2:ns+ks) = t(ns+1) 
+      tmax = t(ns+1)
+
+      nv = ns - ks + 1
+      ms = ns + ns
+
+      End Subroutine mkgrid_02
+
+
+!======================================================================
+      Subroutine mkgrid_03
+!======================================================================
+!     equally-spaced grid for given number of interval "nv" and "rmax"
+!     grid is scaled to factor 1/zg.
+!----------------------------------------------------------------------
+      Use DBS_grid
+      Use DBS_nuclear, z => atomic_number
+
+      Implicit none
+      Integer :: i
+      Real(8) :: ti     
+
+      ns=nv+ks-1; ms=ns+ns;  Allocate(t(ns+ks))
+
+      tmax=rmax/zg;  ti=tmax/nv;  hmax=ti
+
+      t(1:ks)=0.d0;  t(ns+1:ns+ks)=tmax
+      Do i=1,nv-1; t(ks+i)=ti*i; End do
+
+      End Subroutine mkgrid_03
+
+
+!======================================================================
+      Subroutine mkgrid_04
+!======================================================================
+!     equally-spaced grid for given number of splines "ns" and "rmax;
+!
+!     t(i) = tmax * (exp[alfa*(i-k)/(n-k+1)]-1)/(exp(alfa)-1)
+!
+!     i = k,ns+1;    grid is scaled with factor 1/zg
+!----------------------------------------------------------------------
+      Use DBS_grid
+      Use DBS_nuclear, z => atomic_number
+
+      Implicit none
+      integer :: i
+      Real(8) :: s, ts,ti   
+
+      ms=ns+ns; nv=ns-ks+1;  Allocate(t(ns+ks))
+
+      tmax=rmax/zg
+
+! ... initial point:
+
+      if(nuclear.eq.'point') then
+       ti=hi/zg  
+      elseif(nuclear.eq.'Fermi') then
+       ts = 4.d0 * log(3.d0) * a_fermi
+       ti = ts/4.d0
+      else
+       ti = r_uniform/4.d0
+      End if
+
+      alfa = he
+      if(alfa.eq.0.d0) then 
+       alfa=1.d0
+       Do 
+        ts = tmax * (exp(alfa/nv)-1.d0)/(exp(alfa)-1.d0)
+        if(ts.lt.ti.or.ti.eq.0.d0) Exit
+        alfa = alfa + 0.0001d0
+       End do
+      End if
+
+      S = tmax /(exp(alfa)-1.d0)
+      ts = nv
+
+      t(1:ks)=0.d0 
+
+      Do i=ks+1,ns+1; t(i)=S*(exp(alfa*(i-ks)/ts)-1.d0); End do
+
+      t(ns+1:ns+ks)=tmax
+
+      hmax = t(ns+1)-t(ns)
+
+      End Subroutine mkgrid_04
+
+
+!======================================================================
+      Subroutine mkgrid_05
+!======================================================================
+!     sine-like grid (for given ns and tmax):
+!
+!     t(i) = tmax * sin(pi/2 [(i-k)/(n-k+1)]^alfa)
+!
+!     i = k,ns+1;  grid is scaled with factor 1/zg
+!----------------------------------------------------------------------
+      Use DBS_grid
+      Use DBS_nuclear
+
+      Implicit none
+      integer :: i
+      Real(8) :: ts, ti, pp     
+
+      ms=ns+ns; nv=ns-ks+1;  Allocate(t(ns+ks))
+
+! ... initial point:
+
+      if(nuclear.eq.'point') then
+       ti=hi/zg  
+      elseif(nuclear.eq.'Fermi') then
+       ts = 4.d0 * log(3.d0) * a_fermi
+       ti = ts/4.d0
+      else
+       ti = r_uniform/4.d0
+      End if
+
+      pp = pi/2.d0; ts = 1.d0/nv; tmax = rmax/zg
+
+      alfa = he 
+      if(alfa.le.0.d0) &
+       alfa = LOG(DASIN(ti/tmax)/pp)/LOG(ts)
+
+      t(1:ks)=0.d0 
+
+      Do i=ks+1,ns+1; t(i)=tmax*SIN(pp*((i-ks)*ts)**alfa); End do
+
+      t(ns+1:ns+ks)=tmax
+
+      hmax = t(ns+1)-t(ns)
+
+      End Subroutine mkgrid_05
+
+
+!======================================================================
+      Subroutine mkgrid_06
+!======================================================================
+!     semi-logarithmic grid:       ro = alfa*r + beta*log(r)
+!     for given ns and rmax.
+!----------------------------------------------------------------------
+      Use DBS_grid
+      Use DBS_nuclear
+
+      Implicit none
+      Integer :: i
+      Real(8) :: s, ti, ts, h,ro,ro1,ro2,rt,beta,acc
+
+      ms=ns+ns; nv=ns-ks+1;  Allocate(t(ns+ks))
+
+! ... initial point:
+
+      if(nuclear.eq.'point') then
+       ti=hi/zg  
+      elseif(nuclear.eq.'Fermi') then
+       ts = 4.d0 * log(3.d0) * a_fermi
+       ti = ts/4.d0
+      else
+       ti = r_uniform/4.d0
+      End if
+
+      alfa = he
+      if(alfa.gt.1.d0) alfa=1.d0 
+      if(alfa.lt.0.d0) alfa=0.d0 
+      beta = 1.d0-alfa
+      ro1 = alfa*ti + beta*log(ti)
+      ro2 = alfa*tmax + beta*log(tmax)
+      h = (ro2-ro1)/(ns-ks)
+
+      RT = ti; acc=1.d-15; 
+      DO I=1,ns-ks+1
+       RO=ro1+(I-1)*h
+       DO
+        S=(alfa*RT+beta*LOG(RT)-RO)/(alfa*RT+beta)
+        RT=RT*(1.D0-S)
+        IF(ABS(S).lt.acc) Exit
+       End DO
+       t(i+ks)=RT
+      End DO
+
+      t(1:ks)=0.d0
+      t(ns+1:ns+ks)=tmax
+      hmax = t(ns+1)-t(ns)
+
+      End Subroutine mkgrid_06
+
+
+!======================================================================
+      Subroutine mkgrid_07
+!======================================================================
+!     exponential grid for given ns and rmax;  he and hmax are derived.
+!----------------------------------------------------------------------
+      Use DBS_grid
+      Use DBS_nuclear
+
+      Implicit none
+      integer :: i
+      Real(8) :: ts,ti     
+
+      ms=ns+ns; nv=ns-ks+1;  Allocate(t(ns+ks))
+
+! ... initial point:
+
+      if(nuclear.eq.'point') then
+       ti=hi/zg  
+      elseif(nuclear.eq.'Fermi') then
+       ts = 4.d0 * log(3.d0) * a_fermi
+       ti = ts/4.d0
+      else
+       ti = r_uniform/4.d0
+      End if
+
+! ... final point:
+
+      tmax=rmax/zg
+
+      he = exp((log(tmax)-log(ti))/(ns-ks))
+
+      t(1:ks)=0.d0; t(ks+1)=ti 
+      Do i=ks+2,ns+1; t(i)=t(i-1)*he; End do
+      t(ns+1:ns+ks)=tmax
+
+      hmax = t(ns+1)-t(ns)
+
+      End Subroutine mkgrid_07
+
+
+

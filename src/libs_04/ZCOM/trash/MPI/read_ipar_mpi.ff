@@ -1,0 +1,131 @@
+
+!======================================================================
+      Subroutine Read_ipar_mpi(nu,name,ivalue)
+!======================================================================
+!     read the integer variable 'ivalue' with identifier 'name'
+!     from unit 'nu', where the record like 
+!     name =  #####      is supposed to exist
+!----------------------------------------------------------------------
+      Use MPI
+      
+      Implicit none
+
+      Integer, Intent(in) :: nu
+      Character(*), Intent(in) :: name
+      Integer :: ivalue
+
+      Character(80) :: AS
+      Integer :: i,myid,ierr
+ 
+      Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
+
+      if(myid.eq.0) then
+      i=LEN_TRIM(name)
+      rewind(nu)
+    1 read(nu,'(a)',end=2) AS
+      if(AS(1:i).ne.name) go to 1
+      if(AS(i+1:i+1).ne.'='.and.AS(i+1:i+1).ne.' ') go to 1
+      i=INDEX(AS,'=')+1
+      read(AS(i:),*) ivalue
+    2 Continue
+       Call MPI_BCAST(ivalue,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      else 
+       Call MPI_BCAST(ivalue,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      end if
+
+      Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
+
+      End Subroutine Read_ipar_mpi 
+
+
+!======================================================================
+      Subroutine Read_rpar_mpi(nu,name,rvalue)
+!======================================================================
+!
+!     read the real variable 'rvalue' with identifier 'name'
+!     from unit 'nu', where the record like 
+!       
+!     name =  #####    ! coments 
+!
+!     is supposed to exist
+!
+!----------------------------------------------------------------------
+      USE MPI
+
+      Implicit none
+
+      Integer, Intent(in) :: nu
+      Character(*), Intent(in) :: name
+      DOUBLE PRECISION :: rvalue
+
+      Character(80) :: AS
+      Integer :: i, myid, ierr
+
+      Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
+
+      if(myid.eq.0) then
+      i=LEN_TRIM(name)
+      rewind(nu)
+    1 read(nu,'(a)',end=2) AS
+      if(AS(1:i).ne.name) go to 1
+      if(AS(i+1:i+1).ne.'='.and.AS(i+1:i+1).ne.' ') go to 1
+      i=INDEX(AS,'=')+1
+      read(AS(i:),*) rvalue
+    2 Continue
+       Call MPI_BCAST(rvalue,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+      else 
+       Call MPI_BCAST(rvalue,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+      end if
+
+      Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
+
+      End Subroutine Read_rpar_mpi 
+
+
+
+!======================================================================
+      Subroutine Read_apar_mpi(nu,name,avalue)
+!======================================================================
+!
+!     read the character variable 'avalue' with identifier 'name'
+!     from unit 'nu', where the record like 
+!       
+!     name =  #####    ! coments 
+!
+!     is supposed to exist
+!
+!----------------------------------------------------------------------
+      USE MPI
+
+      Implicit none
+
+      Integer, Intent(in) :: nu
+      Character(*), Intent(in) :: name
+      Character(*) :: avalue
+
+      Character(80) :: AS
+      Integer :: i, myid, ierr
+
+      Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
+
+      if(myid.eq.0) then
+      i=LEN_TRIM(name)
+      rewind(nu)
+    1 read(nu,'(a)',end=2) AS
+      if(AS(1:i).ne.name) go to 1
+      if(AS(i+1:i+1).ne.'='.and.AS(i+1:i+1).ne.' ') go to 1
+      i=INDEX(AS,'=')+1
+      read(AS(i:),*) avalue
+    2 Continue
+       i = LEN(avalue)
+       Call MPI_BCAST(avalue,i,MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+      else 
+       i = LEN(avalue)
+       Call MPI_BCAST(avalue,i,MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+      end if
+
+      Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
+
+
+      End Subroutine Read_apar_mpi 
+

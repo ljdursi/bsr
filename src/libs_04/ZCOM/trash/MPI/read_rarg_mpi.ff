@@ -1,0 +1,123 @@
+
+!======================================================================
+      Subroutine Read_rarg_mpi(name,rvalue)
+!======================================================================
+!
+!     read real argument
+!
+!----------------------------------------------------------------------
+
+      Use mpi
+
+      Implicit None
+
+      Character(*) :: name
+      DOUBLE PRECISION :: rvalue
+
+      Character(80) :: AS
+      Integer, External :: IARGC
+      Integer :: iarg,i,i1,i2,iname,myid,ierr
+
+      Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
+
+      if(myid.eq.0) then
+       iarg = IARGC()
+       if(iarg.gt.0) then 
+        iname=LEN_TRIM(name)
+        Do i=1,iarg
+         Call GETARG(i,AS)
+         i1=INDEX(AS,'=')+1; i2=LEN_TRIM(AS)
+         if(AS(1:i1-2).ne.name(1:iname)) Cycle
+         read(AS(i1:i2),*) rvalue; Exit
+        End do
+       end if
+       Call MPI_BCAST(rvalue,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+      else 
+       Call MPI_BCAST(rvalue,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+      end if
+
+      Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
+
+      End Subroutine Read_rarg_mpi
+
+
+!======================================================================
+      Subroutine Read_iarg_mpi(name,ivalue)
+!======================================================================
+!
+!     read integer argument
+!
+!----------------------------------------------------------------------
+      USE MPI
+
+      Implicit None
+
+      Character(*) :: name
+      Integer :: ivalue
+
+      Integer :: iarg,i,i1,i2,iname,myid,ierr
+      Character(80) :: AS
+      Integer, External :: IARGC
+
+      Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
+
+      if(myid.eq.0) then
+       iarg = IARGC()
+       if(iarg.gt.0) then 
+        iname=LEN_TRIM(name)
+        Do i=1,iarg
+         Call GETARG(i,AS)
+         i1=INDEX(AS,'=')+1; i2=LEN_TRIM(AS)
+         if(AS(1:i1-2).ne.name(1:iname)) Cycle
+         read(AS(i1:i2),*) ivalue; Exit
+        End do
+       end if
+       Call MPI_BCAST(ivalue,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      else 
+       Call MPI_BCAST(ivalue,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+      end if
+
+      Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
+
+      End Subroutine Read_iarg_mpi
+
+
+!======================================================================
+      Subroutine Read_aarg_mpi(name,avalue)
+!======================================================================
+!     read characer argument
+!----------------------------------------------------------------------
+      Use MPI
+
+      Implicit None
+
+      Character(*) :: name, avalue
+
+      Integer :: iarg,i,i1,i2,iname,myid,ierr
+      Character(80) :: AS
+      Integer, External :: IARGC
+
+      Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ierr)
+
+      if(myid.eq.0) then
+       iarg = IARGC()
+       if(iarg.eq.0) then 
+        iname=LEN_TRIM(name)
+        Do i=1,iarg
+         Call GETARG(i,AS)
+         i1=INDEX(AS,'=')+1; i2=LEN_TRIM(AS)
+         if(AS(1:i1-2).ne.name(1:iname)) Cycle
+         read(AS(i1:i2),*) avalue; Exit
+        End do
+       end if
+       i = LEN(avalue)
+       Call MPI_BCAST(avalue,i,MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+      else 
+       i = LEN(avalue)
+       Call MPI_BCAST(avalue,i,MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+      end if
+
+      Call MPI_BARRIER(MPI_COMM_WORLD, ierr)
+
+      End Subroutine Read_aarg_mpi
+
