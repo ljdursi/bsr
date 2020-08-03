@@ -1,0 +1,72 @@
+!====================================================================    
+      MODULE DBS_integrals
+!====================================================================
+!     contains the B-spline representation of two-electron integral
+!     rkb(i,j;i',j') in symmetric column storage mode:
+!
+!            rkb(1:ns, 1:ns, 1:ks, 1:ks) 
+!
+!     itype - Character which indicates the type of integral
+!     krk   - multipole index for the integral
+!--------------------------------------------------------------------
+      Implicit none
+
+      Integer :: krk = -100
+      Real(8), pointer :: rkb(:,:,:,:)
+      Character(4) :: itype='aaaa'
+
+      Integer :: kra_min = -100
+      Integer :: kra_max = -100
+      Integer :: ntype = 0
+      Integer, allocatable :: irka(:,:)
+      Real(8), allocatable, target :: rka(:,:,:,:,:,:)
+
+      End MODULE DBS_integrals
+
+
+!====================================================================    
+      Subroutine alloc_DBS_integrals(ns,ks,kmin,kmax,ktype)
+!====================================================================    
+! ... Allocates space for spline integrals:
+!     1.  pppp   5. ppqq
+!     2.  qqqq   6. pqqp
+!     3.  pqpq
+!     4.  qpqp
+!--------------------------------------------------------------------
+      Use DBS_integrals
+
+      Implicit none
+      Integer, intent(in) :: ns,ks,kmin,kmax,ktype
+
+      if(allocated(irka)) Deallocate (irka,rka)
+      Allocate(irka(kmin:kmax,ktype))
+      Allocate(rka(ns,ns,2*ks-1,2*ks-1,kmin:kmax,ktype))
+      kra_min = kmin
+      kra_max = kmax
+      irka = -100
+      ntype = ktype
+
+      if (associated(rkb)) Nullify(rkb)
+      itype='bbbb';  krk=-100
+
+      Call alloc_DBS_moments
+
+      END Subroutine alloc_DBS_integrals
+
+
+!====================================================================    
+      Subroutine dealloc_DBS_integrals
+!====================================================================    
+! ... deAllocates arrays in module "spline_integrals"
+!--------------------------------------------------------------------
+      Use DBS_integrals
+
+      if (associated(rkb)) nullify(rkb)
+      itype='aaaa'; krk = -100
+      if (allocated(irka)) Deallocate(irka,rka)
+      kra_min = -100
+      kra_max = -100
+ 
+      END Subroutine dealloc_DBS_integrals
+
+
