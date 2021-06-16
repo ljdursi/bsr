@@ -11,7 +11,7 @@
 
       Implicit none
       Integer :: i,j, ich,jch,  k, is,js, it,jt, met, nelc_core
-      Real(8) :: C,CO,t0,t1,t2
+      Real(8) ::C,CO,t0,t1,t2,memory_conf_jj,memory_DBS_gauss,memory_orb_jj
       Real(8), allocatable :: biag(:,:,:), CC(:,:), btarg(:)
       Integer, external :: Ifind_channel_jj, no_ic_jj
       Integer :: status(MPI_STATUS_SIZE)

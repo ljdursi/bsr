@@ -17,7 +17,7 @@ get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
 
 if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
   # gfortran
-  set (CMAKE_Fortran_FLAGS_RELEASE "-funroll-all-loops -fno-automatic -fcray-pointer -fno-f2c -O2")
+  set (CMAKE_Fortran_FLAGS_RELEASE "-funroll-all-loops -fno-automatic -fcray-pointer -fno-f2c -O2 -fallow-argument-mismatch")
   set (CMAKE_Fortran_FLAGS_DEBUG   "-fno-f2c -O0 -g")
 elseif (Fortran_COMPILER_NAME MATCHES "ifort.*")
   # ifort (untested)
@@ -52,6 +52,11 @@ endif()
 
 find_package(BLAS)
 find_package(LAPACK)
+find_package(SCALAPACK REQUIRED)
+find_library(SCALAPACK NAMES scalapack libscalapack ScaLAPACK SCALAPACK HINTS /projects/spack/opt/spack/linux-centos8-zen/gcc-8.3.1/netlib-scalapack-2.1.0-7tk5kwnkegac25q4kx6un3agy2vpqkvg/lib/cmake/scalapack-2.1.0 REQUIRED)
+if(${SCALAPACK_FOUND})
+  message("FOUND IT")
+endif()
 set(FC_MALLOC LINUX)
 set(BLAS_LAPACK_LIBRARIES ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
 

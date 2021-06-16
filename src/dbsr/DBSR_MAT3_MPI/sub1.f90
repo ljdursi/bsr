@@ -9,7 +9,7 @@
 
       Implicit none
       Integer :: i, ich,jch, k, it,jt, is,js, nelc_core
-      Real(8) :: C,t0,t1,t2
+      Real(8) :: C,t0,t1,t2,memory_conf_jj,memory_DBS_gauss
       Integer, external :: Ifind_channel_jj, no_ic_jj
 
       Call CPU_time(t0)
@@ -62,7 +62,7 @@
       write(pri,'(a,T40,f10.2,a)') 'memory of DBS_orbitals:', memory_DBS_orbitals,' Mb'
       write(pri,'(a,T40,f10.2,a)') 'memory of DBS_integrals:', memory_DBS_integrals,' Mb'
       write(pri,'(a,T40,f10.2,a)') 'memory of cdata module:', mem_cdata,' Mb'
-      write(pri,'(a,T40,f10.2,a)') 'memory of bufer:', mem_buffer,' Mb'
+      write(pri,'(a,T40,f10.2,a)') 'memory of buffer:', mem_buffer,' Mb'
       write(pri,'(a,T40,f10.2,a)') 'matrix memory:', mem_mat,' Mb'
       C = memory_DBS_gauss + memory_DBS_orbitals + memory_DBS_integrals + &
           mem_cdata + mem_buffer + mem_mat + memory_conf_jj
