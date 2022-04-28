@@ -9,7 +9,7 @@
 !----------------------------------------------------------------------
      Use dbsr_hf
      Use DBS_grid
-     Use DBS_integrals, only: ntype, memory_DBS_integrals
+     Use DBS_HF_integrals, only: ntype, memory_DBS_integrals
 
      Implicit none
 

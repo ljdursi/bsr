@@ -1569,7 +1569,7 @@
 
 
 !====================================================================
-      Module DBS_integrals
+      Module DBS_HF_integrals
 !====================================================================
 !     contains the B-spline representation of two-electron integrals
 !     rkb(i,j;i',j') in the symmetric column storage mode:
@@ -1591,7 +1591,7 @@
 
       Real(8) :: memory_DBS_integrals = 0.d0
 
-      End Module DBS_integrals
+      End Module DBS_HF_integrals
 
 
 !====================================================================
@@ -1603,7 +1603,7 @@
 !     3.  pqpq
 !     4.  qpqp
 !--------------------------------------------------------------------
-      Use DBS_integrals
+      Use DBS_HF_integrals
 
       Implicit none
       Integer, intent(in) :: ns,ks,kmin,kmax,ktype
@@ -1632,7 +1632,7 @@
 !====================================================================
 ! ... deAllocates arrays in module "spline_integrals"
 !--------------------------------------------------------------------
-      Use DBS_integrals
+      Use DBS_HF_integrals
 
       if (associated(rkb)) nullify(rkb)
       itype='aaaa'; krk = -100
@@ -2226,7 +2226,7 @@
 !     combination of sym_i and sym_j leads to different represantation
 !     for a and d:   a(ns,ks),  a(ns,2*ks+1),  a(ns,ns)
 !----------------------------------------------------------------------
-      Use DBS_integrals, only: rkb
+      Use DBS_HF_integrals, only: rkb
       Use DBS_debug
 
       Implicit none
@@ -2906,7 +2906,7 @@
       Use DBS_grid
       Use DBS_gauss
       Use DBS_moments
-      Use DBS_integrals
+      Use DBS_HF_integrals
 
       Implicit none
       Integer, intent(in) :: k
@@ -3075,7 +3075,7 @@
       Use DBS_grid
       Use DBS_gauss
       Use DBS_moments
-      Use DBS_integrals
+      Use DBS_HF_integrals
 
       Implicit none
       Integer, intent(in) :: k
@@ -3257,7 +3257,7 @@
       USE DBS_grid
       USE DBS_gauss
       USE DBS_moments
-      USE DBS_integrals
+      USE DBS_HF_integrals
 
       Implicit none
       Integer, intent(in) :: k
@@ -3439,7 +3439,7 @@
       Use DBS_grid
       Use DBS_gauss
       Use DBS_moments
-      Use DBS_integrals
+      Use DBS_HF_integrals
 
       Implicit none
       Integer, intent(in) :: k
