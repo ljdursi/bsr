@@ -84,8 +84,8 @@
       end if
 
       memory_DBS_integrals =    memory_Rk_integrals  &  
-                              + memory_Rk_integral   &                              
-                              + memory_Sk_integrals  &                              
+                              + memory_Rk_integral   &
+                              + memory_Sk_integrals  &
                               + memory_Sk_integral  
 
       End Subroutine alloc_Rk_integrals
@@ -119,8 +119,8 @@
       end if
 
       memory_DBS_integrals =    memory_Rk_integrals  &  
-                              + memory_Rk_integral   &                              
-                              + memory_Sk_integrals  &                              
+                              + memory_Rk_integral   &
+                              + memory_Sk_integrals  &
                               + memory_Sk_integral  
 
       End Subroutine alloc_Rk_integral
@@ -161,8 +161,8 @@
       end if
 
       memory_DBS_integrals =    memory_Rk_integrals  &  
-                              + memory_Rk_integral   &                              
-                              + memory_Sk_integrals  &                              
+                              + memory_Rk_integral   &
+                              + memory_Sk_integrals  &
                               + memory_Sk_integral  
 
       End Subroutine alloc_Sk_integrals
@@ -196,9 +196,9 @@
        Call alloc_DBS_moments
       end if
 
-      memory_DBS_integrals =    memory_Rk_integrals  &  
-                              + memory_Rk_integral   &                              
-                              + memory_Sk_integrals  &                              
+      memory_DBS_integrals =    memory_Rk_integrals  &
+                              + memory_Rk_integral   &
+                              + memory_Sk_integrals  &
                               + memory_Sk_integral  
 
       End Subroutine alloc_Sk_integral
