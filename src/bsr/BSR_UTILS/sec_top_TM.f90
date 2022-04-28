@@ -30,7 +30,7 @@
       Character :: form
       Character(80) ::  AS
 
-      Real(8), external :: Fdip0, IZ0_lamda
+      Real(8), external :: IZ0_lamda
       Real(8) :: kap1, kap2
 !----------------------------------------------------------------------
 ! ... files:
@@ -715,44 +715,6 @@
       End Subroutine TOP_dipole2
 
 
-!======================================================================
-      Subroutine TOP_dipole3
-!======================================================================
-! ... top-up for exchange transitions, CBE ???
-!----------------------------------------------------------------------
-      Call Get_fll
-
-      S=SUM(fll);  om_sum(itr,ie)=S;  om_top(itr,ie)=S
-
-      Do l=1,ll_max
-
-       eps = 1.d-5
-       F1 = Fdip0(e1,l,e2,l-1,eps,ifail)
-       F2 = Fdip0(e1,l-1,e2,l,eps,ifail)
-       if(ifail.ne.0) write(*,'(a,i5,2f10.5)') 'Fdip0 fail: ',l,e1,e2
-       om1 = 16.d0/3 * l * OS(itr1,itr2) * F2**2
-       om2 = 16.d0/3 * l * OS(itr1,itr2) * F1**2
-       if(jtr1.ne.0) write(pri,'(i2,a1,4E15.5)') l,'.',fll(l,:),om1,om2
-
-      End do
-      if(jtr1.ne.0) write(pri,'(18(''-''))')
-      write(pri,'(a3,E15.5)') 'SUM',S
-      write(pri,'(85(''-''))')
-
-      S = SUM(fll(1:ll_max,:))
-
-      lamda = ll_max
-      C = (1+lamda**2*e2)*om1 - (1+lamda**2*e1)*om2
-      C = C /lamda**2 / (e1-e2) 
-
-      S = S + C;  om_top(itr,ie) = S
-
-      write(pri,'(a3,E15.5,a,i3)') 'TOP',S,' - CBE approximation, lamda = ',lamda
-
-
-      End Subroutine TOP_dipole3
-
-  
 !======================================================================
       Subroutine GET_fl
 !======================================================================
