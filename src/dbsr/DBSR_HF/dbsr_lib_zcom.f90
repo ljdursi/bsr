@@ -2495,12 +2495,11 @@
       Real(8) :: rvalue
       Integer :: iarg,i,i1,i2,iname
       Character(80) :: AS
-!      Integer, internal :: IARGC
 
-      iarg = IARGC(); if(iarg.eq.0) Return
+      iarg = COMMAND_ARGUMENT_COUNT(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       Do i=1,iarg
-       Call GETARG(i,AS)
+       Call GET_COMMAND_ARGUMENT(i,AS)
        i1=INDEX(AS,'=')+1; i2=LEN_TRIM(AS)
        if(AS(1:i1-2).ne.name(1:iname)) Cycle
        read(AS(i1:i2),*) rvalue; Exit
@@ -2519,12 +2518,11 @@
       Integer :: ivalue
       Integer :: iarg,i,i1,i2,iname
       Character(80) :: AS
-!      Integer, internal :: IARGC
 
-      iarg = IARGC(); if(iarg.eq.0) Return
+      iarg = COMMAND_ARGUMENT_COUNT(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       Do i=1,iarg
-       Call GETARG(i,AS)
+       Call GET_COMMAND_ARGUMENT(i,AS)
        i1=INDEX(AS,'=')+1; i2=LEN_TRIM(AS)
        if(AS(1:i1-2).ne.name(1:iname)) Cycle
        read(AS(i1:i2),*) ivalue; Exit
@@ -2541,12 +2539,11 @@
       Character(*) :: name, avalue
       Integer :: iarg,i,i1,i2,iname
       Character(80) :: AS
-!      Integer, internal :: IARGC
 
-      iarg = IARGC(); if(iarg.eq.0) Return
+      iarg = COMMAND_ARGUMENT_COUNT(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       Do i=1,iarg
-       Call GETARG(i,AS)
+       Call GET_COMMAND_ARGUMENT(i,AS)
        i1=INDEX(AS,'=')+1; i2=LEN_TRIM(AS)
        if(AS(1:i1-2).ne.name(1:iname)) Cycle
        read(AS(i1:i2),'(a)') avalue; Exit
@@ -2565,13 +2562,12 @@
       Integer :: na,iarr(na)
       Integer :: iarg,ia,iname,i,i1,i2,j,j1,j2,k,k1,k2
       Character(180) :: AS
-!      Integer, internal :: IARGC
 
-      iarg = IARGC(); if(iarg.eq.0) Return
+      iarg = COMMAND_ARGUMENT_COUNT(); if(iarg.eq.0) Return
       iname=LEN_TRIM(name)
       k=0
       Do i=1,iarg
-       Call GETARG(i,AS)
+       Call GET_COMMAND_ARGUMENT(i,AS)
        i1=INDEX(AS,'=')+1; i2=LEN_TRIM(AS)
        if(AS(1:i1-2).ne.name(1:iname)) Cycle
        k=1; Exit
@@ -2610,11 +2606,10 @@
       Character(*) :: name
       Integer :: iarg,i,i1,i2,iname
       Character(80) :: AS
-!      Integer, internal :: IARGC
 
-      iarg = IARGC(); if(iarg.eq.0) Return
+      iarg = COMMAND_ARGUMENT_COUNT(); if(iarg.eq.0) Return
       Do i=1,iarg
-       Call GETARG(i,AS)
+       Call GET_COMMAND_ARGUMENT(i,AS)
        if(INDEX(AS,'=').ne.0) Cycle
        name=AS
        Exit
