@@ -19,6 +19,10 @@ if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
   # gfortran
   set (CMAKE_Fortran_FLAGS_RELEASE "-funroll-all-loops -fno-automatic -fcray-pointer -fno-f2c -O2 -fallow-argument-mismatch")
   set (CMAKE_Fortran_FLAGS_DEBUG   "-fno-f2c -O0 -g")
+elseif (Fortran_COMPILER_NAME MATCHES "nvfortran.*")
+  # nvidia/pgi
+  set (CMAKE_Fortran_FLAGS_RELEASE "-funroll-all-loops -fno-automatic -fcray-pointer -O2 -fallow-argument-mismatch")
+  set (CMAKE_Fortran_FLAGS_DEBUG   "-O0 -g")
 elseif (Fortran_COMPILER_NAME MATCHES "ifort.*")
   # ifort (untested)
   set (CMAKE_Fortran_FLAGS_RELEASE "-f77rtl -O2")
@@ -44,8 +48,17 @@ else()
   add_definitions("-DDEBUG")
 endif()
 
-find_package(BLAS)
-find_package(LAPACK)
+set(FC_MALLOC LINUX)
+if (Fortran_COMPILER_NAME MATCHES "nvfortran.*")
+  # use nvhpc-provided blas/lapack if we're using nvhpc
+  set(BLAS_LAPACK_LIBRARIES "-lblas -llapack")
+else (Fortran_COMPILER_NAME MATCHES "nvfortran.*")
+  # Otherwise find and use the packages set in the environment
+  find_package(BLAS)
+  find_package(LAPACK)
+  set(BLAS_LAPACK_LIBRARIES ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+endif()
+
 find_package(MPI)
 if(${MPI_Fortran_FOUND})
   find_package(SCALAPACK)
@@ -57,8 +70,6 @@ if(${MPI_Fortran_FOUND})
   endif()
 endif()
 
-set(FC_MALLOC LINUX)
-set(BLAS_LAPACK_LIBRARIES ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
 
 add_subdirectory(libs)
 add_subdirectory(bsr)
